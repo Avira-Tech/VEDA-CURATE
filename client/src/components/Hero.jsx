@@ -996,7 +996,7 @@ export default function Hero() {
             animation: "pulseGlow 2s infinite",
           }}
         >
-          Innovate • Design • Deliver
+          Design • Tech • Growth
         </div>
         {/* Hero Title with Motion Update */}
         <h1
@@ -1094,8 +1094,8 @@ export default function Hero() {
         >
           {[
             { num: "150+", label: "Successful Launches" },
-            { num: "50+", label: "Global Partners" },
-            { num: "8+", label: "Years of Craft" },
+            { num: "10+", label: "Global Partners" },
+            { num: "4+", label: "Years of Craft" },
           ].map((stat, i) => (
             <div key={i} className="stat-item">
               <h4

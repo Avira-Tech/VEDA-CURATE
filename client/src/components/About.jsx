@@ -384,7 +384,7 @@ export default function About() {
   const [counters, setCounters] = useState({ projects: 0, clients: 0, years: 0 });
   const sectionRef = useRef(null);
 
-  const targets = { projects: 150, clients: 50, years: 8 };
+  const targets = { projects: 150, clients: 20, years: 4 };
 
   // Intersection Observer to trigger animations when section is in view
   useEffect(() => {

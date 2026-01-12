@@ -426,8 +426,8 @@ export default function Services() {
       color: "#ff9800",
     },
     {
-      id: "uiux",
-      title: "UI/UX Design",
+      id: "social media",
+      title: "Social Media Design",
       icon: "◈",
       description: "Intuitive interfaces blended with frictionless user journeys, ensuring your digital product is as functional as it is beautiful.",
       features: ["User Research", "Prototyping", "Design Systems"],
@@ -442,11 +442,11 @@ export default function Services() {
       color: "#ff9800",
     },
     {
-      id: "maintenance",
-      title: "Maintenance",
-      icon: "⚙",
-      description: "Continuous evolution and security monitoring to keep your digital platform running at peak performance 24/7.",
-      features: ["Optimization", "Security", "Support"],
+      id: "AR/VR",
+      title: "AR/VR",
+      icon: "◈",
+      description: "Immersive experiences that bring your ideas to life in virtual and augmented reality environments.",
+      features: ["3D Modeling", "Interactive Design", "Spatial Computing"],
       color: "#ff5722",
     },
   ];

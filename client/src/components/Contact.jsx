@@ -76,9 +76,9 @@ export default function Contact() {
 
           <div className="social-proof-cards">
             {[
-              { i: "📧", l: "Direct Email", v: "hello@vedacurate.com" },
-              { i: "📱", l: "Call Us", v: "+1 (555) 012-3456" },
-              { i: "📍", l: "HQ Location", v: "San Francisco, CA" }
+              { i: "📧", l: "Direct Email", v: "rajayush.rxl@gmail.com" },
+              { i: "📱", l: "Call Us", v: "+91 85399 06485" },
+              { i: "📍", l: "HQ Location", v: "Pune, IN" }
             ].map((item, i) => (
               <div key={i} className="magnetic-card">
                 <div className="card-icon-box">{item.i}</div>

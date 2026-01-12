@@ -489,17 +489,17 @@ export default function Clients() {
 
   // Stats Logic: Count-up animation state
   const [counts, setCounts] = useState([0, 0, 0, 0]);
-  const statTargets = [98, 150, 50, 24]; // Satisfaction, Projects, Clients, Support
+  const statTargets = [98, 100, 20, 24]; // Satisfaction, Projects, Clients, Support
 
   const clientLogos = [
-    { name: "TechCorp", initial: "TC" },
-    { name: "StartupX", initial: "SX" },
-    { name: "GlobalBrand", initial: "GB" },
-    { name: "InnovateLab", initial: "IL" },
-    { name: "DigitalWave", initial: "DW" },
-    { name: "FutureScale", initial: "FS" },
-    { name: "CloudNine", initial: "CN" },
-    { name: "NextGen", initial: "NG" },
+    { name: "AviraTech", initial: "AviraTech" },
+    { name: "Inkrid Studio", initial: "Inkrid Studio" },
+    { name: "Toynikk", initial: "Toynik" },
+    { name: "Dynamic Technosoft", initial: "Dynamic Technosoft" },
+    { name: "Pivotalerp", initial: "Pivotalerp" },
+    // { name: "FutureScale", initial: "FS" },
+    // { name: "CloudNine", initial: "CN" },
+    // { name: "NextGen", initial: "NG" },
   ];
 
   const testimonials = [
@@ -605,7 +605,7 @@ export default function Clients() {
       }}>
         <div className="client-badge">Social Proof</div>
         <h2 style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)", fontWeight: "900", color: "#fff" }}>
-          Trusted by <span className="gradient-text">Global Leaders</span>
+         Our  <span className="gradient-text">Clients</span>
         </h2>
       </div>
 
