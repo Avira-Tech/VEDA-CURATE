@@ -527,6 +527,47 @@ export default function About() {
 
       <style>{`
         /* 1. LIQUID MOTION TEXT EFFECT */
+        .about-wrapper {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 60px;
+        }
+
+        @media (max-width: 1024px) {
+          .about-wrapper {
+            grid-template-columns: 1fr;
+            gap: 40px;
+            text-align: center;
+          }
+          .benefit-list {
+            justify-content: center;
+          }
+          .about-badge {
+            margin: 0 auto 35px;
+          }
+          .stats-container {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          .stat-subgrid {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .about-heading {
+            font-size: 2.5rem;
+          }
+          .stats-container {
+            flex-direction: column;
+          }
+          .benefit-list {
+            grid-template-columns: 1fr;
+            text-align: left;
+          }
+        }
+
         .about-heading {
           font-size: clamp(2.8rem, 5vw, 4.8rem);
           font-weight: 900;

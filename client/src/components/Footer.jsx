@@ -654,7 +654,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div style={{
+        <div className="footer-bottom" style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -688,9 +688,26 @@ export default function Footer() {
         .premium-footer-link:hover { color: #ff9800; padding-left: 8px; }
         .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-up { animation: slideUp 1.2s forwards; }
-        @media (max-width: 1024px) { .newsletter-container { grid-template-columns: 1fr; text-align: center; } .footer-grid-system { grid-template-columns: 1fr 1fr; } }
+        .animate-up { animation: fadeInUp 0.8s forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 1024px) {
+          .newsletter-container { grid-template-columns: 1fr; gap: 30px; padding: 40px; }
+          .footer-grid-system { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+          footer { padding: 60px 5% 30px; }
+          .newsletter-container { padding: 30px; }
+          .newsletter-container h3 { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 640px) {
+          .footer-grid-system { grid-template-columns: 1fr; gap: 30px; }
+          .newsletter-container form { flex-direction: column; }
+          .luxury-input-footer { width: 100%; }
+          .subscribe-btn-glow { width: 100%; padding: 15px 0; }
+        }
       `}</style>
     </footer>
   );

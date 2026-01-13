@@ -1062,9 +1062,10 @@ export default function Hero() {
 
         {/* Stats Row */}
         <div
+          className="hero-stats-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
             gap: "40px",
             marginTop: "80px",
             paddingTop: "60px",
@@ -1118,9 +1119,9 @@ export default function Hero() {
         }
 
         @media (max-width: 768px) {
-          #hero { padding: 120px 5% 60px; text-align: center; }
+          #hero { padding: 100px 5% 60px; text-align: center; }
           #hero div { align-items: center; justify-content: center; margin-inline: auto; }
-          div[style*="gridTemplateColumns"] { grid-template-columns: 1fr; gap: 30px; }
+          .hero-stats-grid { grid-template-columns: 1fr !important; gap: 30px; }
         }
       `}</style>
     </section>

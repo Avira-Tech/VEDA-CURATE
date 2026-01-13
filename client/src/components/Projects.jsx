@@ -1,754 +1,85 @@
-// import { useState, useEffect, useRef } from "react";
-
-// export default function Projects() {
-//   const [isVisible, setIsVisible] = useState(false);
-//   const [activeFilter, setActiveFilter] = useState("all");
-//   const [selectedProject, setSelectedProject] = useState(null);
-//   const projectRefs = useRef([]);
-
-//   const projects = [
-//     {
-//       id: 1,
-//       title: "E-Commerce Platform",
-//       category: "web",
-//       image: "🛒",
-//       description:
-//         "A modern e-commerce platform with seamless checkout experience and inventory management.",
-//       fullDescription:
-//         "Built a full-featured e-commerce platform with real-time inventory management, secure payment processing, and an intuitive admin dashboard. The platform handles thousands of concurrent users with sub-second page load times.",
-//       tech: ["React", "Node.js", "MongoDB", "Stripe"],
-//       client: "RetailTech Inc.",
-//       year: "2024",
-//       results: ["40% increase in conversions", "50% faster load times", "99.9% uptime"],
-//     },
-//     {
-//       id: 2,
-//       title: "Fitness App UI",
-//       category: "design",
-//       image: "💪",
-//       description:
-//         "Sleek and intuitive fitness tracking app interface with gamification elements.",
-//       fullDescription:
-//         "Designed a comprehensive fitness tracking app with workout plans, progress tracking, and social features. The gamification elements increased user engagement by 60%.",
-//       tech: ["Figma", "Prototyping", "User Research"],
-//       client: "FitLife Co.",
-//       year: "2024",
-//       results: ["60% increase in engagement", "4.8★ app store rating", "100K+ downloads"],
-//     },
-//     {
-//       id: 3,
-//       title: "Brand Identity",
-//       category: "branding",
-//       image: "✨",
-//       description:
-//         "Complete brand overhaul including logo, guidelines, and marketing materials.",
-//       fullDescription:
-//         "Created a comprehensive brand identity system including logo design, color palette, typography, and extensive brand guidelines. The new identity helped the client secure $2M in funding.",
-//       tech: ["Logo Design", "Brand Strategy", "Print Design"],
-//       client: "StartupXYZ",
-//       year: "2023",
-//       results: ["$2M funding secured", "Brand recognition up 80%", "Featured in 3 design publications"],
-//     },
-//     {
-//       id: 4,
-//       title: "SaaS Dashboard",
-//       category: "web",
-//       image: "📊",
-//       description:
-//         "Analytics dashboard with real-time data visualization and reporting.",
-//       fullDescription:
-//         "Built a powerful analytics dashboard with real-time data updates, customizable widgets, and automated reporting. The intuitive interface reduced time-to-insight by 70%.",
-//       tech: ["Vue.js", "D3.js", "Python", "PostgreSQL"],
-//       client: "DataViz Corp",
-//       year: "2024",
-//       results: ["70% faster insights", "Saved 20hrs/week", "NPS score of 72"],
-//     },
-//     {
-//       id: 5,
-//       title: "Restaurant App",
-//       category: "design",
-//       image: "🍽️",
-//       description:
-//         "Mobile app for restaurant reservations and menu browsing.",
-//       fullDescription:
-//         "Designed a beautiful mobile app for restaurant chain with online ordering, table reservations, and loyalty program integration. The app increased orders by 35%.",
-//       tech: ["Mobile Design", "UX Research", "Prototyping"],
-//       client: "FoodChain Ltd",
-//       year: "2023",
-//       results: ["35% more orders", "50K+ app installs", "4.6★ rating"],
-//     },
-//     {
-//       id: 6,
-//       title: "Corporate Rebrand",
-//       category: "branding",
-//       image: "🏢",
-//       description:
-//         "Full corporate rebrand for a tech startup going global.",
-//       fullDescription:
-//         "Executed a complete corporate rebrand for a scaling tech startup, including visual identity, messaging framework, and internal brand guidelines. The rebrand supported their expansion into 5 new markets.",
-//       tech: ["Brand Strategy", "Visual Identity", "Guidelines"],
-//       client: "TechScale Startup",
-//       year: "2024",
-//       results: ["5-market expansion", "Brand value up 3x", "Team alignment at 95%"],
-//     },
-//   ];
-
-//   const filters = [
-//     { id: "all", label: "All Projects" },
-//     { id: "web", label: "Web Dev" },
-//     { id: "design", label: "UI/UX Design" },
-//     { id: "branding", label: "Branding" },
-//   ];
-
-//   useEffect(() => {
-//     const observer = new IntersectionObserver(
-//       (entries) => {
-//         entries.forEach((entry) => {
-//           if (entry.isIntersecting) {
-//             setIsVisible(true);
-//           }
-//         });
-//       },
-//       { threshold: 0.1 }
-//     );
-
-//     projectRefs.current.forEach((ref) => {
-//       if (ref) observer.observe(ref);
-//     });
-
-//     return () => observer.disconnect();
-//   }, []);
-
-//   const filteredProjects =
-//     activeFilter === "all"
-//       ? projects
-//       : projects.filter((p) => p.category === activeFilter);
-
-//   return (
-//     <section
-//       id="projects"
-//       style={{
-//         minHeight: "100vh",
-//         padding: "120px 10%",
-//         position: "relative",
-//       }}
-//     >
-//       {/* Background Effect */}
-//       <div
-//         style={{
-//           position: "absolute",
-//           bottom: "-30%",
-//           left: "-20%",
-//           width: "600px",
-//           height: "600px",
-//           background: "radial-gradient(circle, rgba(255, 152, 0, 0.06) 0%, transparent 70%)",
-//           borderRadius: "50%",
-//           pointerEvents: "none",
-//         }}
-//       />
-
-//       {/* Section Header */}
-//       <div
-//         style={{
-//           textAlign: "center",
-//           marginBottom: "50px",
-//           opacity: isVisible ? 1 : 0,
-//           transform: isVisible ? "translateY(0)" : "translateY(30px)",
-//           transition: "all 0.8s ease",
-//         }}
-//       >
-//         <div
-//           style={{
-//             display: "inline-block",
-//             padding: "8px 20px",
-//             background: "rgba(255, 152, 0, 0.1)",
-//             border: "1px solid rgba(255, 152, 0, 0.3)",
-//             borderRadius: "30px",
-//             marginBottom: "20px",
-//           }}
-//         >
-//           <span
-//             style={{
-//               color: "#ff9800",
-//               fontSize: "0.9rem",
-//               fontWeight: "600",
-//             }}
-//           >
-//             Our Work
-//           </span>
-//         </div>
-//         <h2
-//           style={{
-//             fontSize: "2.8rem",
-//             fontWeight: "700",
-//             marginBottom: "15px",
-//           }}
-//         >
-//           <span style={{ color: "white" }}>Featured </span>
-//           <span
-//             style={{
-//               background: "linear-gradient(135deg, #ff9800, #ff5722)",
-//               WebkitBackgroundClip: "text",
-//               WebkitTextFillColor: "transparent",
-//               backgroundClip: "text",
-//             }}
-//           >
-//             Projects
-//           </span>
-//         </h2>
-//         <p
-//           style={{
-//             color: "#b0b0b0",
-//             fontSize: "1.1rem",
-//             maxWidth: "600px",
-//             margin: "0 auto",
-//           }}
-//         >
-//           A selection of our recent work across web development, design, and branding.
-//         </p>
-//       </div>
-
-//       {/* Filter Buttons */}
-//       <div
-//         style={{
-//           display: "flex",
-//           justifyContent: "center",
-//           gap: "15px",
-//           marginBottom: "50px",
-//           flexWrap: "wrap",
-//           opacity: isVisible ? 1 : 0,
-//           transform: isVisible ? "translateY(0)" : "translateY(20px)",
-//           transition: "all 0.6s ease 0.2s",
-//         }}
-//       >
-//         {filters.map((filter) => (
-//           <button
-//             key={filter.id}
-//             onClick={() => setActiveFilter(filter.id)}
-//             style={{
-//               padding: "12px 28px",
-//               borderRadius: "30px",
-//               border: activeFilter === filter.id
-//                 ? "none"
-//                 : "1px solid rgba(255, 152, 0, 0.3)",
-//               background: activeFilter === filter.id
-//                 ? "linear-gradient(135deg, #ff9800, #ff5722)"
-//                 : "transparent",
-//               color: activeFilter === filter.id ? "white" : "#b0b0b0",
-//               fontWeight: "600",
-//               fontSize: "0.95rem",
-//               cursor: "pointer",
-//               transition: "all 0.3s ease",
-//             }}
-//             onMouseEnter={(e) => {
-//               if (activeFilter !== filter.id) {
-//                 e.target.style.borderColor = "#ff9800";
-//                 e.target.style.color = "#ff9800";
-//               }
-//             }}
-//             onMouseLeave={(e) => {
-//               if (activeFilter !== filter.id) {
-//                 e.target.style.borderColor = "rgba(255, 152, 0, 0.3)";
-//                 e.target.style.color = "#b0b0b0";
-//               }
-//             }}
-//           >
-//             {filter.label}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Projects Grid */}
-//       <div
-//         style={{
-//           display: "grid",
-//           gridTemplateColumns: "repeat(3, 1fr)",
-//           gap: "30px",
-//           maxWidth: "1200px",
-//           margin: "0 auto",
-//         }}
-//       >
-//         {filteredProjects.map((project, index) => (
-//           <div
-//             key={project.id}
-//             ref={(el) => (projectRefs.current[index] = el)}
-//             onClick={() => setSelectedProject(project)}
-//             style={{
-//               background: "#1a1a1a",
-//               borderRadius: "20px",
-//               overflow: "hidden",
-//               cursor: "pointer",
-//               opacity: isVisible ? 1 : 0,
-//               transform: isVisible
-//                 ? "translateY(0)"
-//                 : "translateY(30px)",
-//               transition: `all 0.6s ease ${index * 0.1}s`,
-//               position: "relative",
-//             }}
-//             className="project-card"
-//           >
-//             {/* Image Placeholder */}
-//             <div
-//               style={{
-//                 height: "200px",
-//                 background: "linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 87, 34, 0.05))",
-//                 display: "flex",
-//                 alignItems: "center",
-//                 justifyContent: "center",
-//                 fontSize: "4rem",
-//                 position: "relative",
-//                 overflow: "hidden",
-//               }}
-//             >
-//               <span style={{ transform: "scale(1)", transition: "transform 0.5s ease" }}>
-//                 {project.image}
-//               </span>
-              
-//               {/* Hover Overlay */}
-//               <div
-//                 style={{
-//                   position: "absolute",
-//                   inset: 0,
-//                   background: "rgba(11, 11, 11, 0.9)",
-//                   display: "flex",
-//                   alignItems: "center",
-//                   justifyContent: "center",
-//                   opacity: 0,
-//                   transition: "opacity 0.3s ease",
-//                 }}
-//                 className="project-overlay"
-//               >
-//                 <span
-//                   style={{
-//                     padding: "12px 24px",
-//                     background: "linear-gradient(135deg, #ff9800, #ff5722)",
-//                     borderRadius: "8px",
-//                     color: "white",
-//                     fontWeight: "600",
-//                     fontSize: "0.9rem",
-//                   }}
-//                 >
-//                   View Details
-//                 </span>
-//               </div>
-//             </div>
-
-//             {/* Content */}
-//             <div style={{ padding: "25px" }}>
-//               <div
-//                 style={{
-//                   display: "inline-block",
-//                   padding: "4px 12px",
-//                   background: "rgba(255, 152, 0, 0.1)",
-//                   borderRadius: "20px",
-//                   fontSize: "0.8rem",
-//                   color: "#ff9800",
-//                   marginBottom: "12px",
-//                   textTransform: "capitalize",
-//                 }}
-//               >
-//                 {project.category}
-//               </div>
-//               <h3
-//                 style={{
-//                   fontSize: "1.3rem",
-//                   fontWeight: "700",
-//                   color: "white",
-//                   marginBottom: "10px",
-//                 }}
-//               >
-//                 {project.title}
-//               </h3>
-//               <p
-//                 style={{
-//                   color: "#888",
-//                   fontSize: "0.95rem",
-//                   lineHeight: "1.6",
-//                 }}
-//               >
-//                 {project.description}
-//               </p>
-
-//               {/* Tech Stack */}
-//               <div
-//                 style={{
-//                   display: "flex",
-//                   gap: "8px",
-//                   flexWrap: "wrap",
-//                   marginTop: "15px",
-//                 }}
-//               >
-//                 {project.tech.slice(0, 3).map((tech, i) => (
-//                   <span
-//                     key={i}
-//                     style={{
-//                       padding: "4px 10px",
-//                       background: "rgba(255, 152, 0, 0.08)",
-//                       border: "1px solid rgba(255, 152, 0, 0.15)",
-//                       borderRadius: "6px",
-//                       fontSize: "0.75rem",
-//                       color: "#cc8500",
-//                     }}
-//                   >
-//                     {tech}
-//                   </span>
-//                 ))}
-//                 {project.tech.length > 3 && (
-//                   <span
-//                     style={{
-//                       padding: "4px 10px",
-//                       background: "rgba(255, 152, 0, 0.08)",
-//                       border: "1px solid rgba(255, 152, 0, 0.15)",
-//                       borderRadius: "6px",
-//                       fontSize: "0.75rem",
-//                       color: "#cc8500",
-//                     }}
-//                   >
-//                     +{project.tech.length - 3}
-//                   </span>
-//                 )}
-//               </div>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-//       {/* Project Modal */}
-//       {selectedProject && (
-//         <div
-//           style={{
-//             position: "fixed",
-//             inset: 0,
-//             background: "rgba(0, 0, 0, 0.9)",
-//             display: "flex",
-//             alignItems: "center",
-//             justifyContent: "center",
-//             zIndex: 2000,
-//             padding: "20px",
-//             backdropFilter: "blur(10px)",
-//           }}
-//           onClick={() => setSelectedProject(null)}
-//         >
-//           <div
-//             style={{
-//               background: "#1a1a1a",
-//               borderRadius: "24px",
-//               maxWidth: "800px",
-//               width: "100%",
-//               maxHeight: "90vh",
-//               overflow: "auto",
-//               position: "relative",
-//               border: "1px solid rgba(255, 152, 0, 0.2)",
-//             }}
-//             onClick={(e) => e.stopPropagation()}
-//           >
-//             {/* Close Button */}
-//             <button
-//               onClick={() => setSelectedProject(null)}
-//               style={{
-//                 position: "absolute",
-//                 top: "20px",
-//                 right: "20px",
-//                 width: "40px",
-//                 height: "40px",
-//                 borderRadius: "50%",
-//                 background: "rgba(255, 152, 0, 0.1)",
-//                 border: "1px solid rgba(255, 152, 0, 0.3)",
-//                 color: "#ff9800",
-//                 fontSize: "1.2rem",
-//                 cursor: "pointer",
-//                 zIndex: 1,
-//                 display: "flex",
-//                 alignItems: "center",
-//                 justifyContent: "center",
-//               }}
-//             >
-//               ✕
-//             </button>
-
-//             {/* Modal Image */}
-//             <div
-//               style={{
-//                 height: "250px",
-//                 background: "linear-gradient(135deg, rgba(255, 152, 0, 0.15), rgba(255, 87, 34, 0.08))",
-//                 display: "flex",
-//                 alignItems: "center",
-//                 justifyContent: "center",
-//                 fontSize: "6rem",
-//               }}
-//             >
-//               {selectedProject.image}
-//             </div>
-
-//             {/* Modal Content */}
-//             <div style={{ padding: "40px" }}>
-//               <div
-//                 style={{
-//                   display: "inline-block",
-//                   padding: "6px 16px",
-//                   background: "rgba(255, 152, 0, 0.1)",
-//                   borderRadius: "20px",
-//                   fontSize: "0.85rem",
-//                   color: "#ff9800",
-//                   marginBottom: "20px",
-//                   textTransform: "capitalize",
-//                 }}
-//               >
-//                 {selectedProject.category}
-//               </div>
-
-//               <h2
-//                 style={{
-//                   fontSize: "2rem",
-//                   fontWeight: "700",
-//                   color: "white",
-//                   marginBottom: "20px",
-//                 }}
-//               >
-//                 {selectedProject.title}
-//               </h2>
-
-//               <p
-//                 style={{
-//                   color: "#b0b0b0",
-//                   fontSize: "1.1rem",
-//                   lineHeight: "1.8",
-//                   marginBottom: "30px",
-//                 }}
-//               >
-//                 {selectedProject.fullDescription}
-//               </p>
-
-//               {/* Tech Stack */}
-//               <div style={{ marginBottom: "30px" }}>
-//                 <h4
-//                   style={{
-//                     color: "white",
-//                     fontSize: "1rem",
-//                     marginBottom: "15px",
-//                   }}
-//                 >
-//                   Technologies Used
-//                 </h4>
-//                 <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-//                   {selectedProject.tech.map((tech, i) => (
-//                     <span
-//                       key={i}
-//                       style={{
-//                         padding: "8px 16px",
-//                         background: "rgba(255, 152, 0, 0.1)",
-//                         border: "1px solid rgba(255, 152, 0, 0.3)",
-//                         borderRadius: "8px",
-//                         fontSize: "0.9rem",
-//                         color: "#ff9800",
-//                       }}
-//                     >
-//                       {tech}
-//                     </span>
-//                   ))}
-//                 </div>
-//               </div>
-
-//               {/* Results */}
-//               <div
-//                 style={{
-//                   background: "rgba(255, 152, 0, 0.05)",
-//                   borderRadius: "16px",
-//                   padding: "25px",
-//                   border: "1px solid rgba(255, 152, 0, 0.1)",
-//                 }}
-//               >
-//                 <h4
-//                   style={{
-//                     color: "white",
-//                     fontSize: "1rem",
-//                     marginBottom: "15px",
-//                   }}
-//                 >
-//                   Key Results
-//                 </h4>
-//                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-//                   {selectedProject.results.map((result, i) => (
-//                     <div
-//                       key={i}
-//                       style={{ display: "flex", alignItems: "center", gap: "12px" }}
-//                     >
-//                       <span
-//                         style={{
-//                           width: "8px",
-//                           height: "8px",
-//                           background: "linear-gradient(135deg, #ff9800, #ff5722)",
-//                           borderRadius: "50%",
-//                         }}
-//                       />
-//                       <span style={{ color: "#b0b0b0" }}>{result}</span>
-//                     </div>
-//                   ))}
-//                 </div>
-//               </div>
-
-//               {/* Client Info */}
-//               <div
-//                 style={{
-//                   display: "flex",
-//                   gap: "40px",
-//                   marginTop: "30px",
-//                   paddingTop: "25px",
-//                   borderTop: "1px solid #333",
-//                 }}
-//               >
-//                 <div>
-//                   <span
-//                     style={{
-//                       color: "#666",
-//                       fontSize: "0.85rem",
-//                       display: "block",
-//                       marginBottom: "5px",
-//                     }}
-//                   >
-//                     Client
-//                   </span>
-//                   <span style={{ color: "white", fontWeight: "600" }}>
-//                     {selectedProject.client}
-//                   </span>
-//                 </div>
-//                 <div>
-//                   <span
-//                     style={{
-//                       color: "#666",
-//                       fontSize: "0.85rem",
-//                       display: "block",
-//                       marginBottom: "5px",
-//                     }}
-//                   >
-//                     Year
-//                   </span>
-//                   <span style={{ color: "white", fontWeight: "600" }}>
-//                     {selectedProject.year}
-//                   </span>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       {/* Styles */}
-//       <style>{`
-//         .project-card:hover {
-//           transform: translateY(-10px) !important;
-//           box-shadow: 0 20px 60px rgba(255, 152, 0, 0.15);
-//         }
-//         .project-card:hover .project-overlay {
-//           opacity: 1 !important;
-//         }
-//         .project-card:hover img,
-//         .project-card:hover span:first-child {
-//           transform: scale(1.1) !important;
-//         }
-//         @media (max-width: 1024px) {
-//           #projects > div:nth-child(4) {
-//             grid-template-columns: repeat(2, 1fr) !important;
-//           }
-//         }
-//         @media (max-width: 640px) {
-//           #projects > div:nth-child(4) {
-//             grid-template-columns: 1fr !important;
-//           }
-//         }
-//       `}</style>
-//     </section>
-//   );
-// }
-
 import { useState, useEffect, useRef } from "react";
+import ayushPortfolioImg from "../assets/projects/ayush-portfolio.jpg";
+import inkridStudiosImg from "../assets/projects/inkrid-studios.jpg";
+import xrExperiencesImg from "../assets/projects/xr-experiences.jpg";
 
 export default function Projects() {
   const [isVisible, setIsVisible] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("all");
   const [selectedProject, setSelectedProject] = useState(null);
   const sectionRef = useRef(null);
 
   const projects = [
     {
       id: 1,
-      title: "E-Commerce Platform",
-      category: "web",
-      icon: "🛒",
-      description: "Seamless checkout and inventory management.",
-      fullDescription: "A high-performance e-commerce solution built for sub-second load times and massive concurrent traffic.",
-      tech: ["React", "Node.js", "MongoDB", "Stripe"],
-      client: "RetailTech Inc.",
-      year: "2024",
-      results: ["40% increase in conversions", "50% faster load times"],
-    },
-    {
-      id: 2,
-      title: "Fitness App UI",
-      category: "design",
-      icon: "💪",
-      description: "Sleek and intuitive fitness tracking interface.",
-      fullDescription: "A gamified fitness experience designed to maximize user retention and daily engagement.",
-      tech: ["Figma", "Prototyping", "User Research"],
-      client: "FitLife Co.",
-      year: "2024",
-      results: ["60% increase in engagement", "4.8★ rating"],
+      title: "Mine VR & Space VR",
+      category: "xr",
+      icon: "🕶️",
+      image: xrExperiencesImg,
+      role: "Project Lead & Creative Director",
+      description: "Two exploratory VR experiences into scale, risk, and human presence.",
+      fullDescription: "Driven by curiosity rather than briefs. Both Mine VR and Space VR were built to push the limits of how virtual environments can communicate danger, isolation, and spatial awareness without relying on heavy narration or instruction.",
+      intent: "Understand how presence alone can shape emotion and decision-making.",
+      experiences: [
+        {
+          title: "Mine VR",
+          description: "Explores confined underground spaces where visibility, scale, and sound shape tension. Focused on uncertainty and environmental storytelling.",
+          url: "https://vimeo.com/1085310303?share=copy"
+        },
+        {
+          title: "Space VR",
+          description: "Shifts to vastness and isolation. Emptiness and silence become narrative tools, emphasizing scale, vulnerability, and psychological distance.",
+          url: "https://vimeo.com/1084626476?share=copy"
+        }
+      ],
+      medium: "Virtual Reality (used for spatial storytelling and experiential testing)",
+      reflection: "Clarified interest in building experiences where environment carries meaning. Tested ideas around pacing, presence, and how much information an experience truly needs to convey.",
+      roles: ["Project management", "Concept development", "Idea direction", "Selective development contributions"],
+      challenge: "To understand how presence alone can shape emotion and decision-making without relying on heavy narration.",
+      solution: "Mine VR explores confined underground spaces where visibility, scale, and sound play a critical role in shaping tension. Space VR shifts the context to vastness and isolation, where emptiness and silence become narrative tools.",
+      tech: ["Virtual Reality", "Spatial Storytelling", "Experiential Testing"],
+      client: "Personal Project",
+      year: "2025",
+      results: ["Pacing & Presence Testing", "Environmental Storytelling", "Spatial Awareness"],
+      projectLinks: [
+        { label: "Watch Mine VR", url: "https://vimeo.com/1085310303?share=copy" },
+        { label: "Watch Space VR", url: "https://vimeo.com/1084626476?share=copy" }
+      ]
     },
     {
       id: 3,
-      title: "Brand Identity",
-      category: "branding",
-      icon: "✨",
-      description: "Complete visual brand overhaul system.",
-      fullDescription: "Strategic visual identity that secured client funding and market leadership.",
-      tech: ["Brand Strategy", "Logo Design", "Guidelines"],
-      client: "StartupXYZ",
-      year: "2023",
-      results: ["$2M funding secured", "80% brand recognition"],
-    },
-    {
-      id: 4,
-      title: "SaaS Dashboard",
-      category: "web",
-      icon: "📊",
-      description: "Real-time analytics and data visualization.",
-      fullDescription: "Complex data simplified into actionable insights through an intuitive web dashboard.",
-      tech: ["Vue.js", "D3.js", "Python"],
-      client: "DataViz Corp",
-      year: "2024",
-      results: ["70% faster insights", "NPS score of 72"],
-    },
-    {
-      id: 5,
-      title: "Restaurant App",
+      title: "Inkrid Studios",
       category: "design",
-      icon: "🍽️",
-      description: "Mobile ordering and loyalty platform.",
-      fullDescription: "Integrated ordering system designed for high-frequency restaurant chains.",
-      tech: ["Mobile UX", "Figma", "Interaction"],
-      client: "FoodChain Ltd",
-      year: "2023",
-      results: ["35% more orders", "50K+ installs"],
+      icon: "🎮",
+      image: inkridStudiosImg,
+      role: "Interactive Developer & Narrative Designer",
+      link: "https://chisel-dinghy-e5e.notion.site/About-ME-2d2f082c7900800ab818e196d6ec9e18",
+      description: "Narrative-driven experiences and interactive systems.",
+      fullDescription: "A creative space focused on narrative-driven experiences, experimentation, and long-term thinking across interactive media. Working with Games, XR, and Interactive Systems to build immersive worlds.",
+      challenge: "Creating immersive narrative experiences that blend technical systems with storytelling while maintaining user agency.",
+      solution: "Built interactive worlds that respond dynamically to user input using Unreal Engine and XR technologies to enhance presence and emotional connection.",
+      tech: ["Unreal Engine", "Unity", "XR", "Interactive Systems"],
+      client: "Inkrid Studios",
+      year: "2024",
+      results: ["Innovative Storytelling", "Immersive Worlds", "Interactive Media"],
     },
     {
-      id: 6,
-      title: "Corporate Rebrand",
+      id: 2,
+      title: "Ayush Raj Portfolio",
       category: "branding",
-      icon: "🏢",
-      description: "Global identity for tech-scale startups.",
-      fullDescription: "Scaling a local brand into a global leader through unified messaging and visuals.",
-      tech: ["Visual ID", "Messaging", "Scale Strategy"],
-      client: "TechScale Startup",
+      icon: "🎨",
+      image: ayushPortfolioImg,
+      role: "UI/UX Designer & 3D Artist",
+      link: "https://bento.me/rajayush014",
+      description: "Branding, UI/UX, and 3D modeling showcase.",
+      fullDescription: "Creative and versatile Graphic Designer with expertise in branding, UI/UX, and 3D modeling. Translating concepts into visually compelling assets across games, startups, and social media platforms.",
+      challenge: "Showcasing a diverse skillset across branding, UI/UX, and 3D modeling in a cohesive portfolio that doesn't feel disjointed.",
+      solution: "Designed a unified visual identity system that seamlessly integrates 2D and 3D assets, using consistent typography and color palettes to tie different disciplines together.",
+      tech: ["Adobe Suite", "Blender", "Figma", "3D Modeling"],
+      client: "Personal Brand",
       year: "2024",
-      results: ["5-market expansion", "3x Brand Value"],
+      results: ["Visual Identity System", "3D Asset Creation", "Cross-Platform Design"],
     },
-  ];
-
-  const filters = [
-    { id: "all", label: "All Work" },
-    { id: "web", label: "Web Dev" },
-    { id: "design", label: "UI/UX Design" },
-    { id: "branding", label: "Branding" },
+    
   ];
 
   useEffect(() => {
@@ -758,10 +89,6 @@ export default function Projects() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
-
-  const filteredProjects = activeFilter === "all" 
-    ? projects 
-    : projects.filter(p => p.category === activeFilter);
 
   return (
     <section id="projects" ref={sectionRef} style={{
@@ -795,30 +122,9 @@ export default function Projects() {
         </h2>
       </div>
 
-      {/* Filters */}
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        gap: "12px",
-        marginBottom: "60px",
-        flexWrap: "wrap",
-        opacity: isVisible ? 1 : 0,
-        transition: "all 0.8s ease 0.2s"
-      }}>
-        {filters.map(f => (
-          <button
-            key={f.id}
-            onClick={() => setActiveFilter(f.id)}
-            className={`filter-btn ${activeFilter === f.id ? 'active' : ''}`}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
-
       {/* Grid */}
       <div className="portfolio-grid">
-        {filteredProjects.map((project, index) => (
+        {projects.map((project, index) => (
           <div
             key={project.id}
             onClick={() => setSelectedProject(project)}
@@ -830,7 +136,11 @@ export default function Projects() {
             }}
           >
             <div className="project-preview-box">
-               <div className="project-icon-glow">{project.icon}</div>
+               {project.image ? (
+                 <img src={project.image} alt={project.title} className="project-image" />
+               ) : (
+                 <div className="project-icon-glow">{project.icon}</div>
+               )}
                <div className="preview-overlay">
                   <span className="view-tag">View Case Study</span>
                </div>
@@ -858,16 +168,94 @@ export default function Projects() {
             <button className="close-btn" onClick={() => setSelectedProject(null)}>✕</button>
             
             <div className="modal-hero">
-               <div className="modal-hero-icon">{selectedProject.icon}</div>
+               {selectedProject.image ? (
+                 <img src={selectedProject.image} alt={selectedProject.title} className="modal-hero-image" />
+               ) : (
+                 <div className="modal-hero-icon">{selectedProject.icon}</div>
+               )}
             </div>
 
             <div className="modal-body">
                <div className="modal-header-info">
                   <span className="project-category">{selectedProject.category}</span>
                   <h2 className="modal-title">{selectedProject.title}</h2>
+                  {selectedProject.role && <div className="project-role">{selectedProject.role}</div>}
                </div>
 
                <p className="modal-desc">{selectedProject.fullDescription}</p>
+
+               {selectedProject.intent && (
+                 <div className="modal-text-block" style={{ marginBottom: 30 }}>
+                   <h4>Intent</h4>
+                   <p>{selectedProject.intent}</p>
+                 </div>
+               )}
+
+               {selectedProject.experiences && selectedProject.experiences.length > 0 && (
+                 <div className="modal-text-block" style={{ marginBottom: 30 }}>
+                   <h4>The Experiences</h4>
+                   <div className="experiences-list">
+                     {selectedProject.experiences.map((exp, i) => (
+                       <div key={i} className="experience-item">
+                         <div className="experience-header">
+                           <span className="experience-title">{exp.title}</span>
+                           {exp.url && (
+                             <a href={exp.url} target="_blank" rel="noopener noreferrer" className="view-project-btn" style={{ padding: "8px 16px", fontSize: "0.85rem" }}>
+                               Watch <span className="arrow">↗</span>
+                             </a>
+                           )}
+                         </div>
+                         <p className="experience-desc">{exp.description}</p>
+                       </div>
+                     ))}
+                   </div>
+                 </div>
+               )}
+
+               {(selectedProject.medium || selectedProject.reflection) && (
+                 <div className="modal-section-grid">
+                   {selectedProject.medium && (
+                     <div className="modal-text-block">
+                       <h4>Medium</h4>
+                       <p>{selectedProject.medium}</p>
+                     </div>
+                   )}
+                   {selectedProject.reflection && (
+                     <div className="modal-text-block">
+                       <h4>Reflection</h4>
+                       <p>{selectedProject.reflection}</p>
+                     </div>
+                   )}
+                 </div>
+               )}
+
+               {selectedProject.roles && selectedProject.roles.length > 0 && (
+                 <div className="modal-text-block" style={{ marginBottom: 30 }}>
+                   <h4>My Role</h4>
+                   <ul className="roles-list">
+                     {selectedProject.roles.map((r, i) => (
+                       <li key={i}>{r}</li>
+                     ))}
+                   </ul>
+                 </div>
+               )}
+
+               {(selectedProject.challenge || selectedProject.solution) && (
+                 <div className="modal-section-grid">
+                    {selectedProject.challenge && (
+                      <div className="modal-text-block">
+                        <h4>The Challenge</h4>
+                        <p>{selectedProject.challenge}</p>
+                      </div>
+                    )}
+                    {selectedProject.solution && (
+                      <div className="modal-text-block">
+                        <h4>The Solution</h4>
+                        <p>{selectedProject.solution}</p>
+                      </div>
+                    )}
+                 </div>
+               )}
 
                <div className="modal-details-grid">
                   <div className="detail-col">
@@ -897,6 +285,19 @@ export default function Projects() {
                      <label>Year</label>
                      <span>{selectedProject.year}</span>
                   </div>
+                  {selectedProject.projectLinks ? (
+                    <div className="project-links-container">
+                      {selectedProject.projectLinks.map((link, idx) => (
+                        <a key={idx} href={link.url} target="_blank" rel="noopener noreferrer" className="view-project-btn" style={{width: 'auto', fontSize: '0.9rem', padding: '10px 20px'}}>
+                          {link.label} <span className="arrow">↗</span>
+                        </a>
+                      ))}
+                    </div>
+                  ) : selectedProject.link && (
+                    <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="view-project-btn">
+                      View Project <span className="arrow">↗</span>
+                    </a>
+                  )}
                </div>
             </div>
           </div>
@@ -939,9 +340,9 @@ export default function Projects() {
 
         .portfolio-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
           gap: 30px;
-          max-width: 1400px;
+          max-width: 1200px;
           margin: 0 auto;
         }
 
@@ -967,6 +368,16 @@ export default function Projects() {
           align-items: center;
           justify-content: center;
           position: relative;
+          overflow: hidden;
+        }
+        .project-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+        .project-glass-card:hover .project-image {
+          transform: scale(1.1);
         }
         .project-icon-glow {
           font-size: 5rem;
@@ -1039,30 +450,82 @@ export default function Projects() {
           border-radius: 40px;
           overflow: hidden;
           position: relative;
+          display: flex;
+          flex-direction: column;
         }
         .modal-hero {
-          height: 300px;
-          background: linear-gradient(135deg, rgba(255,152,0,0.2), rgba(0,0,0,1));
+          width: 100%;
+          height: auto;
+          min-height: 250px;
+          max-height: 500px;
+          background: #000;
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+        .modal-hero-image {
+          width: 100%;
+          height: 100%;
+          max-height: 500px;
+          object-fit: contain;
         }
         .modal-hero-icon { font-size: 8rem; filter: drop-shadow(0 0 30px #ff9800); }
-        .modal-body { padding: 50px; overflow-y: auto; }
-        .modal-title { font-size: 3rem; font-weight: 900; color: #fff; margin-bottom: 25px; }
+        .modal-body { 
+          padding: 50px; 
+          overflow-y: auto; 
+          flex: 1;
+        }
+        .modal-title { font-size: 3rem; font-weight: 900; color: #fff; margin-bottom: 10px; }
+        .project-role { font-size: 1.1rem; color: #ff9800; font-weight: 600; margin-bottom: 25px; }
         .modal-desc { font-size: 1.2rem; color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 40px; }
+
+        .modal-section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        .modal-text-block h4 { color: #fff; margin-bottom: 10px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-text-block p { color: rgba(255,255,255,0.7); line-height: 1.6; font-size: 0.95rem; }
 
         .modal-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
         .detail-col h4 { color: #ff9800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; font-size: 0.9rem; }
         .result-item { display: flex; align-items: center; gap: 10px; color: #fff; margin-bottom: 12px; }
         .dot { width: 6px; height: 6px; background: #ff9800; border-radius: 50%; }
 
+        .experiences-list { display: flex; flex-direction: column; gap: 16px; }
+        .experience-item { border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; background: rgba(255,255,255,0.03); }
+        .experience-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+        .experience-title { color: #fff; font-weight: 800; letter-spacing: 0.5px; }
+        .experience-desc { color: rgba(255,255,255,0.7); line-height: 1.6; font-size: 0.95rem; }
+        .roles-list { margin: 10px 0 0; padding-left: 18px; color: rgba(255,255,255,0.85); }
+
         .modal-tech-list { display: flex; flex-wrap: wrap; gap: 10px; }
         .modal-tech-tag { padding: 8px 16px; background: rgba(255,255,255,0.05); border-radius: 12px; color: #fff; }
 
-        .modal-footer { display: flex; gap: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .modal-footer { display: flex; gap: 60px; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); align-items: center; }
         .client-info label { display: block; color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-bottom: 5px; }
         .client-info span { color: #fff; font-weight: 700; font-size: 1.2rem; }
+
+        .project-links-container {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-left: auto;
+        }
+
+        .view-project-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 24px;
+          background: #ff9800;
+          color: #fff;
+          text-decoration: none;
+          border-radius: 50px;
+          font-weight: 700;
+          transition: all 0.3s ease;
+          margin-left: auto;
+        }
+        .view-project-btn:hover { background: #ff5722; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 87, 34, 0.3); }
+        .view-project-btn .arrow { font-size: 1.2rem; }
 
         .close-btn {
           position: absolute;
@@ -1081,10 +544,33 @@ export default function Projects() {
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        @media (max-width: 992px) {
+          .portfolio-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+          .modal-content { max-width: 90%; }
+        }
+
         @media (max-width: 768px) {
+          .portfolio-grid { grid-template-columns: 1fr; }
           .modal-body { padding: 30px; }
-          .modal-details-grid { grid-template-columns: 1fr; }
+          .modal-details-grid { grid-template-columns: 1fr; gap: 20px; }
+          .modal-section-grid { grid-template-columns: 1fr; gap: 20px; }
           .modal-title { font-size: 2rem; }
+          .modal-hero { min-height: 200px; max-height: 350px; }
+          .modal-hero-icon { font-size: 6rem; }
+          .view-project-btn { width: 100%; justify-content: center; margin-left: 0; }
+          .experience-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+
+        @media (max-width: 480px) {
+          .modal-body { padding: 20px; }
+          .modal-title { font-size: 1.8rem; }
+          .modal-hero { min-height: 180px; max-height: 300px; }
+          .modal-hero-icon { font-size: 4rem; }
+          .modal-footer { gap: 30px; flex-direction: column; }
+          .close-btn { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 1.2rem; }
+          .project-info { padding: 20px; }
+          .project-title { font-size: 1.4rem; }
+          .project-links-container { margin-left: 0; width: 100%; }
         }
       `}</style>
     </section>

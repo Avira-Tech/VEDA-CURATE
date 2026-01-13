@@ -47,15 +47,7 @@ export default function Contact() {
   );
 
   return (
-    <section id="contact" ref={sectionRef} style={{
-      minHeight: "100vh",
-      padding: "100px 8%",
-      background: "transparent",
-      display: "flex",
-      alignItems: "center",
-      position: "relative",
-      overflow: "hidden"
-    }}>
+    <section id="contact" ref={sectionRef} className="contact-section">
       
       {/* Decorative Blur Orbs */}
       <div className="bg-orb-contact" />
@@ -160,6 +152,16 @@ export default function Contact() {
       </div>
 
       <style>{`
+        .contact-section {
+          min-height: 100vh;
+          padding: 100px 8%;
+          background: transparent;
+          display: flex;
+          align-items: center;
+          position: relative;
+          overflow: hidden;
+        }
+
         .contact-grid { 
           display: grid; 
           grid-template-columns: 1fr 1fr; 
@@ -261,8 +263,15 @@ export default function Contact() {
         @keyframes slideLeft { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
 
         @media (max-width: 992px) {
+          .contact-section { padding: 80px 5%; }
           .contact-grid { grid-template-columns: 1fr; gap: 60px; }
           .form-container-glass { padding: 40px; }
+        }
+
+        @media (max-width: 480px) {
+          .contact-section { padding: 60px 5%; }
+          .form-container-glass { padding: 25px; }
+          .contact-heading { font-size: 2.5rem; }
         }
       `}</style>
     </section>

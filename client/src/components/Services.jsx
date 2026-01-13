@@ -509,7 +509,7 @@ export default function Services() {
       {/* Services Grid */}
       <div className="services-grid" style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
         gap: "30px",
         position: "relative",
         zIndex: 1
@@ -559,6 +559,22 @@ export default function Services() {
       </div>
 
       <style>{`
+        .services-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 30px;
+        }
+
+        @media (max-width: 480px) {
+          .services-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+          .glass-service-card {
+            padding: 30px;
+          }
+        }
+
         .gradient-text {
           background: linear-gradient(135deg, #ff9800, #ff5722);
           -webkit-background-clip: text;

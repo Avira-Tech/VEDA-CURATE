@@ -492,6 +492,10 @@ export default function Navbar() {
           transition: 0.5s;
         }
         .mobile-overlay.active a { opacity: 1; transform: translateY(0); }
+        
+        @media (max-width: 480px) {
+          .mobile-overlay a { font-size: 1.5rem; margin: 10px 0; }
+        }
       `}</style>
     </nav>
   );

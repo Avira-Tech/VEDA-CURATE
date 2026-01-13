@@ -735,11 +735,19 @@ export default function Clients() {
 
         @keyframes scrollLogos { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         
-        @media (max-width: 900px) {
+        @media (max-width: 992px) {
           .impact-stats-grid { grid-template-columns: repeat(2, 1fr); }
           .glass-testimonial { padding: 40px; }
           .author-block { flex-wrap: wrap; }
           .impact-tag { margin-left: 0; margin-top: 20px; width: 100%; text-align: center; }
+        }
+
+        @media (max-width: 480px) {
+          .impact-stats-grid { grid-template-columns: 1fr; }
+          .stat-v { font-size: 2rem; }
+          .glass-testimonial { padding: 25px; }
+          .main-quote { font-size: 1.2rem; }
+          .quote-mark { font-size: 8rem; left: 10px; top: -10px; }
         }
       `}</style>
     </section>
