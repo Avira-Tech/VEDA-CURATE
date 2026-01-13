@@ -847,7 +847,6 @@ import { useState, useEffect, useRef } from "react";
 ========================= */
 function LetterByLetter({ text, delay = 0, className = "", style = {} }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), delay);
@@ -860,8 +859,6 @@ function LetterByLetter({ text, delay = 0, className = "", style = {} }) {
     <span
       className={`letter-by-letter ${className}`}
       style={{ display: "inline-block", ...style }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {text.split("").map((char, index) => (
         <span
@@ -874,7 +871,6 @@ function LetterByLetter({ text, delay = 0, className = "", style = {} }) {
             transition: `all 0.6s cubic-bezier(0.23, 1, 0.32, 1)`,
             transitionDelay: `${index * 0.02}s`,
             position: "relative",
-            color: isHovered ? "#ff9800" : "inherit",
           }}
         >
           {char === " " ? "\u00A0" : char}
@@ -936,15 +932,11 @@ function WordBlock({ words, delay = 0, gradient = false }) {
 }
 
 export default function Hero() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
   const heroRef = useRef(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMouseMove);
     setIsLoaded(true);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const scrollToSection = (href) => {
@@ -962,21 +954,9 @@ export default function Hero() {
         position: "relative",
         overflow: "hidden",
         padding: "100px 8%",
-        background: "#080808",
         color: "#fff",
       }}
     >
-      {/* Dynamic Background Mesh */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(255, 152, 0, 0.08) 0%, transparent 40%)`,
-          zIndex: 0,
-          pointerEvents: "none",
-        }}
-      />
-
       <div style={{ position: "relative", zIndex: 1, maxWidth: "1000px" }}>
         {/* Modern Glass Badge */}
 
@@ -1037,6 +1017,7 @@ export default function Hero() {
           style={{
             display: "flex",
             gap: "24px",
+            flexWrap: "wrap",
             opacity: isLoaded ? 1 : 0,
             transition: "all 0.8s ease 1.2s",
           }}
@@ -1136,22 +1117,9 @@ export default function Hero() {
           50% { transform: translateY(-8px) rotate(0.5deg); }
         }
 
-        /* Button & Stat Hover States */
-        .btn-primary:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 15px 40px rgba(255, 87, 34, 0.5);
-        }
-
-        .stat-item:hover h4 {
-           text-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
-           transform: scale(1.05);
-           transition: all 0.4s ease;
-        }
-
         @media (max-width: 768px) {
           #hero { padding: 120px 5% 60px; text-align: center; }
           #hero div { align-items: center; justify-content: center; margin-inline: auto; }
-          h1 { line-height: 1.1; }
           div[style*="gridTemplateColumns"] { grid-template-columns: 1fr; gap: 30px; }
         }
       `}</style>
