@@ -267,16 +267,248 @@
 //   );
 // }
 
+// import { useState, useEffect } from "react";
+// import logo from "../assets/logo.png";
+
+// export default function Navbar() {
+//   const [scrolled, setScrolled] = useState(false);
+//   const [logoLoaded, setLogoLoaded] = useState(false);
+//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+//   useEffect(() => {
+//     setLogoLoaded(true);
+//     const handleScroll = () => setScrolled(window.scrollY > 40);
+//     window.addEventListener("scroll", handleScroll);
+//     return () => window.removeEventListener("scroll", handleScroll);
+//   }, []);
+
+//   const navLinks = [
+//     { name: "Home", href: "#hero" },
+//     { name: "About", href: "#about" },
+//     { name: "Services", href: "#services" },
+//     { name: "Work", href: "#projects" },
+//     { name: "Contact", href: "#contact" },
+//   ];
+
+//   const scrollToSection = (href) => {
+//     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+//     setMobileMenuOpen(false);
+//   };
+
+//   return (
+//     <nav
+//       className={`navbar-container ${scrolled ? "scrolled" : ""}`}
+//       style={{
+//         position: "fixed",
+//         top: scrolled ? "20px" : "0px",
+//         left: "0",
+//         right: "0",
+//         zIndex: 1000,
+//         padding: "0 5%",
+//         transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+//       }}
+//     >
+//       <div
+//         className="navbar-inner"
+//         style={{
+//           maxWidth: scrolled ? "1200px" : "100%",
+//           margin: "0 auto",
+//           display: "flex",
+//           justifyContent: "space-between",
+//           alignItems: "center",
+//           padding: scrolled ? "12px 30px" : "30px 5%",
+//           background: scrolled ? "rgba(11, 11, 11, 0.75)" : "transparent",
+//           backdropFilter: scrolled ? "blur(15px)" : "none",
+//           WebkitBackdropFilter: scrolled ? "blur(15px)" : "none",
+//           borderRadius: scrolled ? "100px" : "0px",
+//           border: scrolled ? "1px solid rgba(255, 152, 0, 0.2)" : "1px solid transparent",
+//           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+//         }}
+//       >
+//         {/* Logo Section */}
+//         <div
+//           style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}
+//           onClick={() => scrollToSection("#hero")}
+//         >
+//           <img
+//             src={logo}
+//             alt="Vedacurate"
+//             style={{
+//               width: scrolled ? "35px" : "45px",
+//               height: "auto",
+//               filter: "drop-shadow(0 0 10px rgba(255, 152, 0, 0.3))",
+//               transition: "all 0.5s ease"
+//             }}
+//           />
+//           <span
+//             style={{
+//               fontSize: scrolled ? "1.4rem" : "1.8rem",
+//               fontWeight: "800",
+//               letterSpacing: "-1px",
+//               background: "linear-gradient(to right, #ff9800, #ff5722)",
+//               WebkitBackgroundClip: "text",
+//               WebkitTextFillColor: "transparent",
+//               transition: "all 0.5s ease"
+//             }}
+//           >
+//             Vedacurate
+//           </span>
+//         </div>
+
+//         {/* Desktop Links */}
+//         <div className="desktop-links" style={{ display: "flex", gap: "35px", alignItems: "center" }}>
+//           {navLinks.map((link) => (
+//             <a
+//               key={link.name}
+//               href={link.href}
+//               onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
+//               className="nav-item"
+//               style={{
+//                 color: "rgba(255,255,255,0.7)",
+//                 textDecoration: "none",
+//                 fontSize: "0.95rem",
+//                 fontWeight: "600",
+//                 letterSpacing: "0.5px",
+//                 position: "relative",
+//                 padding: "5px 0",
+//                 transition: "color 0.3s ease"
+//               }}
+//             >
+//               {link.name}
+//               <span className="nav-underline" />
+//             </a>
+//           ))}
+          
+//           <button
+//             onClick={() => scrollToSection("#contact")}
+//             className="talk-btn"
+//             style={{
+//               background: "linear-gradient(135deg, #ff9800, #ff5722)",
+//               color: "white",
+//               border: "none",
+//               padding: scrolled ? "10px 24px" : "12px 28px",
+//               borderRadius: "50px",
+//               fontWeight: "700",
+//               fontSize: "0.9rem",
+//               cursor: "pointer",
+//               marginLeft: "10px",
+//               boxShadow: "0 10px 20px rgba(255, 87, 34, 0.2)",
+//               transition: "all 0.3s ease"
+//             }}
+//           >
+//             Let's Talk
+//           </button>
+//         </div>
+
+//         {/* Mobile Toggle */}
+//         <button 
+//           className="mobile-toggle" 
+//           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+//           style={{ display: "none", background: "transparent", border: "none", color: "white", cursor: "pointer" }}
+//         >
+//           <div className={`burger ${mobileMenuOpen ? 'open' : ''}`}>
+//             <span></span>
+//             <span></span>
+//           </div>
+//         </button>
+//       </div>
+
+//       {/* Mobile Menu Overlay */}
+//       <div className={`mobile-overlay ${mobileMenuOpen ? 'active' : ''}`}>
+//         {navLinks.map((link, i) => (
+//           <a 
+//             key={link.name} 
+//             href={link.href} 
+//             style={{ transitionDelay: `${i * 0.1}s` }}
+//             onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
+//           >
+//             {link.name}
+//           </a>
+//         ))}
+//       </div>
+
+//       <style>{`
+//         @media (max-width: 992px) {
+//           .desktop-links { display: none !important; }
+//           .mobile-toggle { display: block !important; }
+//         }
+
+//         .nav-item:hover { color: #fff !important; }
+//         .nav-item:hover .nav-underline { width: 100%; }
+
+//         .nav-underline {
+//           position: absolute;
+//           bottom: 0;
+//           left: 0;
+//           width: 0;
+//           height: 2px;
+//           background: #ff9800;
+//           transition: width 0.3s ease;
+//         }
+
+//         .talk-btn:hover {
+//           transform: translateY(-2px);
+//           box-shadow: 0 15px 30px rgba(255, 87, 34, 0.4);
+//         }
+
+//         /* Burger Icon */
+//         .burger span {
+//           display: block;
+//           width: 25px;
+//           height: 2px;
+//           background: white;
+//           margin: 6px 0;
+//           transition: 0.4s;
+//         }
+//         .burger.open span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
+//         .burger.open span:nth-child(2) { transform: rotate(45deg) translate(-5px, -7px); }
+
+//         /* Mobile Overlay */
+//         .mobile-overlay {
+//           position: fixed;
+//           top: 0;
+//           left: 0;
+//           width: 100%;
+//           height: 0;
+//           background: rgba(8, 8, 8, 0.98);
+//           backdrop-filter: blur(20px);
+//           overflow: hidden;
+//           display: flex;
+//           flex-direction: column;
+//           align-items: center;
+//           justify-content: center;
+//           transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+//           z-index: -1;
+//         }
+//         .mobile-overlay.active { height: 100vh; }
+//         .mobile-overlay a {
+//           color: white;
+//           font-size: 2rem;
+//           font-weight: 800;
+//           text-decoration: none;
+//           margin: 15px 0;
+//           opacity: 0;
+//           transform: translateY(20px);
+//           transition: 0.5s;
+//         }
+//         .mobile-overlay.active a { opacity: 1; transform: translateY(0); }
+        
+//         @media (max-width: 480px) {
+//           .mobile-overlay a { font-size: 1.5rem; margin: 10px 0; }
+//         }
+//       `}</style>
+//     </nav>
+//   );
+// }
+
 import { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [logoLoaded, setLogoLoaded] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setLogoLoaded(true);
     const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -300,12 +532,12 @@ export default function Navbar() {
       className={`navbar-container ${scrolled ? "scrolled" : ""}`}
       style={{
         position: "fixed",
-        top: scrolled ? "20px" : "0px",
+        top: scrolled ? "15px" : "0px",
         left: "0",
         right: "0",
         zIndex: 1000,
         padding: "0 5%",
-        transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+        transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
     >
       <div
@@ -316,39 +548,53 @@ export default function Navbar() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: scrolled ? "12px 30px" : "30px 5%",
-          background: scrolled ? "rgba(11, 11, 11, 0.75)" : "transparent",
-          backdropFilter: scrolled ? "blur(15px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(15px)" : "none",
+          padding: scrolled ? "10px 35px" : "25px 5%",
+          background: scrolled ? "rgba(11, 11, 11, 0.85)" : "transparent",
+          backdropFilter: scrolled ? "blur(20px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
           borderRadius: scrolled ? "100px" : "0px",
-          border: scrolled ? "1px solid rgba(255, 152, 0, 0.2)" : "1px solid transparent",
-          transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+          border: scrolled ? "1px solid rgba(255, 152, 0, 0.25)" : "1px solid transparent",
+          boxShadow: scrolled ? "0 20px 40px rgba(0,0,0,0.3)" : "none",
+          transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
         {/* Logo Section */}
         <div
-          style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}
+          className="logo-container"
+          style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: "5px", 
+            cursor: "pointer",
+          }}
           onClick={() => scrollToSection("#hero")}
         >
           <img
             src={logo}
             alt="Vedacurate"
+            className="logo-img"
             style={{
-              width: scrolled ? "35px" : "45px",
+              width: scrolled ? "60px" : "80px", // Increased size
               height: "auto",
-              filter: "drop-shadow(0 0 10px rgba(255, 152, 0, 0.3))",
-              transition: "all 0.5s ease"
+              filter: scrolled 
+                ? "drop-shadow(0 0 12px rgba(255, 152, 0, 0.5))" 
+                : "drop-shadow(0 0 8px rgba(255, 152, 0, 0.2))",
+              transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+              animation: "float 4s ease-in-out infinite" // Continuous float animation
             }}
           />
           <span
+            className="logo-text"
             style={{
-              fontSize: scrolled ? "1.4rem" : "1.8rem",
-              fontWeight: "800",
-              letterSpacing: "-1px",
-              background: "linear-gradient(to right, #ff9800, #ff5722)",
+              fontSize: scrolled ? "1.6rem" : "2.1rem", // Increased size
+              fontWeight: "900",
+              letterSpacing: "-1.5px",
+              background: "linear-gradient(to right, #ff9800, #ff5722, #ff9800)",
+              backgroundSize: "200% auto",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
-              transition: "all 0.5s ease"
+              transition: "all 0.5s ease",
+              animation: "shimmer 3s linear infinite"
             }}
           >
             Vedacurate
@@ -356,7 +602,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Links */}
-        <div className="desktop-links" style={{ display: "flex", gap: "35px", alignItems: "center" }}>
+        <div className="desktop-links" style={{ display: "flex", gap: "40px", alignItems: "center" }}>
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -364,14 +610,13 @@ export default function Navbar() {
               onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
               className="nav-item"
               style={{
-                color: "rgba(255,255,255,0.7)",
+                color: scrolled ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.7)",
                 textDecoration: "none",
-                fontSize: "0.95rem",
+                fontSize: "1rem",
                 fontWeight: "600",
-                letterSpacing: "0.5px",
                 position: "relative",
                 padding: "5px 0",
-                transition: "color 0.3s ease"
+                transition: "all 0.3s ease"
               }}
             >
               {link.name}
@@ -386,13 +631,13 @@ export default function Navbar() {
               background: "linear-gradient(135deg, #ff9800, #ff5722)",
               color: "white",
               border: "none",
-              padding: scrolled ? "10px 24px" : "12px 28px",
+              padding: scrolled ? "12px 28px" : "14px 32px",
               borderRadius: "50px",
               fontWeight: "700",
-              fontSize: "0.9rem",
+              fontSize: "0.95rem",
               cursor: "pointer",
               marginLeft: "10px",
-              boxShadow: "0 10px 20px rgba(255, 87, 34, 0.2)",
+              boxShadow: "0 10px 20px rgba(255, 87, 34, 0.3)",
               transition: "all 0.3s ease"
             }}
           >
@@ -428,12 +673,26 @@ export default function Navbar() {
       </div>
 
       <style>{`
+        /* Floating Animation for Logo */
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+          100% { transform: translateY(0px); }
+        }
+
+        /* Subtle Gradient Shimmer for Text */
+        @keyframes shimmer {
+          to { background-position: 200% center; }
+        }
+
         @media (max-width: 992px) {
           .desktop-links { display: none !important; }
           .mobile-toggle { display: block !important; }
+          .logo-text { font-size: 1.5rem !important; }
+          .logo-img { width: 40px !important; }
         }
 
-        .nav-item:hover { color: #fff !important; }
+        .nav-item:hover { color: #fff !important; transform: translateY(-1px); }
         .nav-item:hover .nav-underline { width: 100%; }
 
         .nav-underline {
@@ -443,25 +702,27 @@ export default function Navbar() {
           width: 0;
           height: 2px;
           background: #ff9800;
-          transition: width 0.3s ease;
+          transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .talk-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 15px 30px rgba(255, 87, 34, 0.4);
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 15px 35px rgba(255, 87, 34, 0.5);
         }
+
+        .talk-btn:active { transform: translateY(-1px); }
 
         /* Burger Icon */
         .burger span {
           display: block;
-          width: 25px;
+          width: 28px;
           height: 2px;
           background: white;
-          margin: 6px 0;
+          margin: 8px 0;
           transition: 0.4s;
         }
-        .burger.open span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
-        .burger.open span:nth-child(2) { transform: rotate(45deg) translate(-5px, -7px); }
+        .burger.open span:nth-child(1) { transform: rotate(-45deg) translate(-7px, 7px); }
+        .burger.open span:nth-child(2) { transform: rotate(45deg) translate(-7px, -7px); }
 
         /* Mobile Overlay */
         .mobile-overlay {
@@ -471,7 +732,7 @@ export default function Navbar() {
           width: 100%;
           height: 0;
           background: rgba(8, 8, 8, 0.98);
-          backdrop-filter: blur(20px);
+          backdrop-filter: blur(25px);
           overflow: hidden;
           display: flex;
           flex-direction: column;
@@ -483,19 +744,15 @@ export default function Navbar() {
         .mobile-overlay.active { height: 100vh; }
         .mobile-overlay a {
           color: white;
-          font-size: 2rem;
+          font-size: 2.5rem;
           font-weight: 800;
           text-decoration: none;
-          margin: 15px 0;
+          margin: 20px 0;
           opacity: 0;
-          transform: translateY(20px);
-          transition: 0.5s;
+          transform: translateY(30px);
+          transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .mobile-overlay.active a { opacity: 1; transform: translateY(0); }
-        
-        @media (max-width: 480px) {
-          .mobile-overlay a { font-size: 1.5rem; margin: 10px 0; }
-        }
       `}</style>
     </nav>
   );

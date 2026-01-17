@@ -26,14 +26,33 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulated Secure API Call
-    await new Promise(r => setTimeout(r, 2000));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setTimeout(() => { 
-      setFormData({ name: "", email: "", projectType: "", message: "" }); 
-      setIsSubmitted(false); 
-    }, 4000);
+
+    try {
+      const response = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setFormData({ name: "", email: "", projectType: "", message: "" });
+          setIsSubmitted(false);
+        }, 4000);
+      } else {
+        alert(data.message || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Submit error:', error);
+      alert('Failed to send message. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const InputWrapper = ({ name, label, children }) => (
@@ -68,7 +87,7 @@ export default function Contact() {
 
           <div className="social-proof-cards">
             {[
-              { i: "📧", l: "Direct Email", v: "rajayush.rxl@gmail.com" },
+              { i: "📧", l: "Direct Email", v: "Vedacurate@gmail.com" },
               { i: "📱", l: "Call Us", v: "+91 85399 06485" },
               { i: "📍", l: "HQ Location", v: "Pune, IN" }
             ].map((item, i) => (

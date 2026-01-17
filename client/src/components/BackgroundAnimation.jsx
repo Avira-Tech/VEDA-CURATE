@@ -1181,9 +1181,205 @@
 //   );
 // }
 
+// import { useEffect, useRef } from "react";
+
+// export default function BackgroundAnimation() {
+//   const canvasRef = useRef(null);
+//   const mouseRef = useRef({ x: 0, y: 0, velocity: 0 });
+//   const prevMouseRef = useRef({ x: 0, y: 0 });
+//   const splashesRef = useRef([]);
+
+//   useEffect(() => {
+//     const canvas = canvasRef.current;
+//     const ctx = canvas.getContext("2d");
+//     let animationFrameId;
+//     let time = 0;
+
+//     // Branded Multi-color Palette
+//     const colors = [
+//       "#FF4500", // Orange Red
+//       "#FF8C00", // Dark Orange
+//       "#FFA500", // Orange
+//       "#FFD700", // Gold
+//       "#FFFFFF", // Pure White (for highlights)
+//     ];
+
+//     const resizeCanvas = () => {
+//       canvas.width = window.innerWidth;
+//       canvas.height = window.innerHeight;
+//     };
+//     resizeCanvas();
+//     window.addEventListener("resize", resizeCanvas);
+
+//     const handleMouseMove = (e) => {
+//       const dx = e.clientX - prevMouseRef.current.x;
+//       const dy = e.clientY - prevMouseRef.current.y;
+//       const velocity = Math.sqrt(dx * dx + dy * dy);
+      
+//       mouseRef.current = { x: e.clientX, y: e.clientY, velocity };
+//       prevMouseRef.current = { x: e.clientX, y: e.clientY };
+
+//       // Increase frequency of splash for smoother spreading
+//       if (velocity > 5) {
+//         splashesRef.current.push(new Splash(e.clientX, e.clientY, velocity, colors));
+//       }
+//     };
+
+//     window.addEventListener("mousemove", handleMouseMove);
+
+//     /* =========================
+//        MULTICOLOR SPREADER EFFECT
+//     ========================= */
+//     class Splash {
+//       constructor(x, y, velocity, palette) {
+//         this.x = x;
+//         this.y = y;
+//         // Create more particles based on speed
+//         const particleCount = Math.min(Math.floor(velocity / 2), 12);
+        
+//         this.particles = Array.from({ length: particleCount }, () => {
+//           const angle = Math.random() * Math.PI * 2;
+//           const force = Math.random() * (velocity * 0.15);
+          
+//           return {
+//             x: 0,
+//             y: 0,
+//             vx: Math.cos(angle) * force,
+//             vy: Math.sin(angle) * force,
+//             life: 1.0,
+//             size: Math.random() * 4 + 1,
+//             // Assign a random color from the palette
+//             color: palette[Math.floor(Math.random() * palette.length)]
+//           };
+//         });
+//       }
+
+//       update() {
+//         this.particles.forEach(p => {
+//           p.x += p.vx;
+//           p.y += p.vy;
+//           p.vx *= 0.95; // Add slight friction
+//           p.vy *= 0.95;
+//           p.life -= 0.02; // Fade out speed
+//         });
+//         return (this.particles = this.particles.filter(p => p.life > 0)).length > 0;
+//       }
+
+//       draw() {
+//         this.particles.forEach(p => {
+//           ctx.beginPath();
+//           ctx.arc(this.x + p.x, this.y + p.y, p.size * p.life, 0, Math.PI * 2);
+//           ctx.fillStyle = p.color;
+//           ctx.globalAlpha = p.life * 0.8;
+//           ctx.fill();
+          
+//           // Add a small glow to each particle
+//           ctx.shadowBlur = 10;
+//           ctx.shadowColor = p.color;
+//         });
+//         ctx.globalAlpha = 1;
+//         ctx.shadowBlur = 0; // Reset shadow for other drawings
+//       }
+//     }
+
+//     /* =========================
+//        REMAINING ELEMENTS (Rings & Strands)
+//     ========================= */
+//     class BrandRing {
+//       constructor(index) {
+//         this.index = index;
+//         this.reset();
+//       }
+//       reset() {
+//         this.radius = 100 + this.index * 150;
+//         this.opacity = 0.03 + Math.random() * 0.03;
+//       }
+//       draw(t) {
+//         const pulse = Math.sin(t * 0.5 + this.index) * 20;
+//         ctx.beginPath();
+//         ctx.arc(canvas.width / 2, canvas.height / 2, this.radius + pulse, 0, Math.PI * 2);
+//         ctx.strokeStyle = `rgba(255, 140, 0, ${this.opacity})`;
+//         ctx.lineWidth = 1;
+//         ctx.stroke();
+//       }
+//     }
+
+//     class Strand {
+//       constructor() { this.reset(); }
+//       reset() {
+//         this.x = Math.random() * canvas.width;
+//         this.y = Math.random() * canvas.height;
+//         this.len = Math.random() * 300 + 200;
+//         this.speed = Math.random() * 0.4 + 0.1;
+//       }
+//       draw(t) {
+//         ctx.beginPath();
+//         const grad = ctx.createLinearGradient(this.x, this.y, this.x + this.len, this.y);
+//         grad.addColorStop(0, "transparent");
+//         grad.addColorStop(0.5, "rgba(255, 165, 0, 0.08)");
+//         grad.addColorStop(1, "transparent");
+//         ctx.strokeStyle = grad;
+//         ctx.lineWidth = 1;
+//         ctx.moveTo(this.x, this.y);
+//         for(let i=0; i<this.len; i+=10) {
+//           const shift = Math.sin(i * 0.01 + t) * 10;
+//           ctx.lineTo(this.x + i, this.y + shift);
+//         }
+//         ctx.stroke();
+//         this.x -= this.speed;
+//         if (this.x < -this.len) this.x = canvas.width;
+//       }
+//     }
+
+//     const rings = Array.from({ length: 6 }, (_, i) => new BrandRing(i));
+//     const strands = Array.from({ length: 8 }, () => new Strand());
+
+//     const animate = () => {
+//       time += 0.015;
+//       ctx.fillStyle = "#0B0B0B";
+//       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+//       rings.forEach(r => r.draw(time));
+//       strands.forEach(s => s.draw(time));
+
+//       splashesRef.current = splashesRef.current.filter(s => {
+//         const active = s.update();
+//         if (active) s.draw();
+//         return active;
+//       });
+
+//       // Cleanup to keep it fast
+//       if (splashesRef.current.length > 60) splashesRef.current.shift();
+
+//       animationFrameId = requestAnimationFrame(animate);
+//     };
+
+//     animate();
+
+//     return () => {
+//       window.removeEventListener("resize", resizeCanvas);
+//       window.removeEventListener("mousemove", handleMouseMove);
+//       cancelAnimationFrame(animationFrameId);
+//     };
+//   }, []);
+
+//   return (
+//     <div style={{ position: "fixed", inset: 0, zIndex: -1, background: "#0B0B0B", overflow: "hidden" }}>
+//       <canvas ref={canvasRef} style={{ display: "block" }} />
+//       <div style={{
+//         position: "absolute",
+//         inset: 0,
+//         opacity: 0.03,
+//         pointerEvents: "none",
+//         backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+//       }} />
+//     </div>
+//   );
+// }
+
 import { useEffect, useRef } from "react";
 
-export default function BackgroundAnimation() {
+export default function PortfolioBackground() {
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0, velocity: 0 });
   const prevMouseRef = useRef({ x: 0, y: 0 });
@@ -1191,18 +1387,11 @@ export default function BackgroundAnimation() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     let animationFrameId;
     let time = 0;
 
-    // Branded Multi-color Palette
-    const colors = [
-      "#FF4500", // Orange Red
-      "#FF8C00", // Dark Orange
-      "#FFA500", // Orange
-      "#FFD700", // Gold
-      "#FFFFFF", // Pure White (for highlights)
-    ];
+    const colors = ["#FF4500", "#FF8C00", "#FFA500", "#FFD700", "#FFFFFF"];
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
@@ -1219,36 +1408,31 @@ export default function BackgroundAnimation() {
       mouseRef.current = { x: e.clientX, y: e.clientY, velocity };
       prevMouseRef.current = { x: e.clientX, y: e.clientY };
 
-      // Increase frequency of splash for smoother spreading
-      if (velocity > 5) {
-        splashesRef.current.push(new Splash(e.clientX, e.clientY, velocity, colors));
+      if (velocity > 4) {
+        splashesRef.current.push(new BrushStroke(e.clientX, e.clientY, velocity, colors));
       }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
 
     /* =========================
-       MULTICOLOR SPREADER EFFECT
+       1. YOUR BRUSH EFFECT (Refined)
     ========================= */
-    class Splash {
+    class BrushStroke {
       constructor(x, y, velocity, palette) {
         this.x = x;
         this.y = y;
-        // Create more particles based on speed
-        const particleCount = Math.min(Math.floor(velocity / 2), 12);
+        const particleCount = Math.min(Math.floor(velocity / 1.5), 15);
         
         this.particles = Array.from({ length: particleCount }, () => {
           const angle = Math.random() * Math.PI * 2;
-          const force = Math.random() * (velocity * 0.15);
-          
+          const force = Math.random() * (velocity * 0.2);
           return {
-            x: 0,
-            y: 0,
+            x: 0, y: 0,
             vx: Math.cos(angle) * force,
             vy: Math.sin(angle) * force,
             life: 1.0,
-            size: Math.random() * 4 + 1,
-            // Assign a random color from the palette
+            size: Math.random() * 5 + 2,
             color: palette[Math.floor(Math.random() * palette.length)]
           };
         });
@@ -1256,91 +1440,112 @@ export default function BackgroundAnimation() {
 
       update() {
         this.particles.forEach(p => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vx *= 0.95; // Add slight friction
-          p.vy *= 0.95;
-          p.life -= 0.02; // Fade out speed
+          p.x += p.vx; p.y += p.vy;
+          p.vx *= 0.92; p.vy *= 0.92;
+          p.life -= 0.015;
         });
-        return (this.particles = this.particles.filter(p => p.life > 0)).length > 0;
+        this.particles = this.particles.filter(p => p.life > 0);
+        return this.particles.length > 0;
       }
 
       draw() {
         this.particles.forEach(p => {
+          ctx.globalAlpha = p.life * 0.6;
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = p.color;
+          ctx.fillStyle = p.color;
           ctx.beginPath();
           ctx.arc(this.x + p.x, this.y + p.y, p.size * p.life, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.life * 0.8;
           ctx.fill();
-          
-          // Add a small glow to each particle
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = p.color;
         });
-        ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0; // Reset shadow for other drawings
+        ctx.shadowBlur = 0;
       }
     }
 
     /* =========================
-       REMAINING ELEMENTS (Rings & Strands)
+       2. UNIQUE ADDITION: THE KINETIC GRID
     ========================= */
-    class BrandRing {
-      constructor(index) {
-        this.index = index;
+    class KineticGrid {
+      constructor() {
+        this.spacing = 60;
+      }
+      draw() {
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = "rgba(255, 140, 0, 0.05)";
+        
+        for (let x = 0; x < canvas.width; x += this.spacing) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          for (let y = 0; y < canvas.height; y += 20) {
+            const dist = Math.hypot(x - mouseRef.current.x, y - mouseRef.current.y);
+            const warp = Math.max(0, (150 - dist) * 0.2);
+            ctx.lineTo(x + (x < mouseRef.current.x ? -warp : warp), y);
+          }
+          ctx.stroke();
+        }
+        for (let y = 0; y < canvas.height; y += this.spacing) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          for (let x = 0; x < canvas.width; x += 20) {
+            const dist = Math.hypot(x - mouseRef.current.x, y - mouseRef.current.y);
+            const warp = Math.max(0, (150 - dist) * 0.2);
+            ctx.lineTo(x, y + (y < mouseRef.current.y ? -warp : warp));
+          }
+          ctx.stroke();
+        }
+      }
+    }
+
+    /* =========================
+       3. UNIQUE ADDITION: DESIGN NODES (GUIDELINES)
+    ========================= */
+    class DesignNode {
+      constructor() {
         this.reset();
       }
       reset() {
-        this.radius = 100 + this.index * 150;
-        this.opacity = 0.03 + Math.random() * 0.03;
-      }
-      draw(t) {
-        const pulse = Math.sin(t * 0.5 + this.index) * 20;
-        ctx.beginPath();
-        ctx.arc(canvas.width / 2, canvas.height / 2, this.radius + pulse, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(255, 140, 0, ${this.opacity})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
-    }
-
-    class Strand {
-      constructor() { this.reset(); }
-      reset() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.len = Math.random() * 300 + 200;
-        this.speed = Math.random() * 0.4 + 0.1;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
       }
-      draw(t) {
-        ctx.beginPath();
-        const grad = ctx.createLinearGradient(this.x, this.y, this.x + this.len, this.y);
-        grad.addColorStop(0, "transparent");
-        grad.addColorStop(0.5, "rgba(255, 165, 0, 0.08)");
-        grad.addColorStop(1, "transparent");
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 1;
-        ctx.moveTo(this.x, this.y);
-        for(let i=0; i<this.len; i+=10) {
-          const shift = Math.sin(i * 0.01 + t) * 10;
-          ctx.lineTo(this.x + i, this.y + shift);
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        const dist = Math.hypot(this.x - mouseRef.current.x, this.y - mouseRef.current.y);
+        if (dist < 250) {
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(mouseRef.current.x, mouseRef.current.y);
+          ctx.strokeStyle = `rgba(255, 165, 0, ${0.15 * (1 - dist / 250)})`;
+          ctx.stroke();
+          
+          // Draw tiny node point
+          ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+          ctx.fillRect(this.x - 2, this.y - 2, 4, 4);
         }
-        ctx.stroke();
-        this.x -= this.speed;
-        if (this.x < -this.len) this.x = canvas.width;
       }
     }
 
-    const rings = Array.from({ length: 6 }, (_, i) => new BrandRing(i));
-    const strands = Array.from({ length: 8 }, () => new Strand());
+    const grid = new KineticGrid();
+    const nodes = Array.from({ length: 40 }, () => new DesignNode());
 
     const animate = () => {
-      time += 0.015;
-      ctx.fillStyle = "#0B0B0B";
+      time += 0.01;
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#080808"; // Slightly deeper black
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      rings.forEach(r => r.draw(time));
-      strands.forEach(s => s.draw(time));
+      grid.draw();
+
+      nodes.forEach(n => {
+        n.update();
+        n.draw();
+      });
 
       splashesRef.current = splashesRef.current.filter(s => {
         const active = s.update();
@@ -1348,8 +1553,7 @@ export default function BackgroundAnimation() {
         return active;
       });
 
-      // Cleanup to keep it fast
-      if (splashesRef.current.length > 60) splashesRef.current.shift();
+      if (splashesRef.current.length > 80) splashesRef.current.shift();
 
       animationFrameId = requestAnimationFrame(animate);
     };
@@ -1364,14 +1568,22 @@ export default function BackgroundAnimation() {
   }, []);
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: -1, background: "#0B0B0B", overflow: "hidden" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: -1, background: "#080808", overflow: "hidden" }}>
       <canvas ref={canvasRef} style={{ display: "block" }} />
+      {/* Designer Paper Texture Overlay */}
       <div style={{
         position: "absolute",
         inset: 0,
-        opacity: 0.03,
+        opacity: 0.04,
         pointerEvents: "none",
-        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+      }} />
+      {/* Subtle Vignette */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        background: "radial-gradient(circle, transparent 40%, rgba(0,0,0,0.4) 100%)",
+        pointerEvents: "none"
       }} />
     </div>
   );

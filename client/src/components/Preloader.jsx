@@ -587,177 +587,589 @@
 //   );
 // }
 
-import { useEffect, useRef, useState } from "react";
+// import { useEffect, useRef, useState } from "react";
+// import gsap from "gsap";
+
+// export default function LoadingScreen({ onComplete }) {
+//   const containerRef = useRef(null);
+//   const lettersRef = useRef([]);
+//   const [progress, setProgress] = useState(0);
+//   const text = "VEDACURATE";
+
+//   useEffect(() => {
+//     const tl = gsap.timeline({
+//       defaults: { ease: "power4.out" }
+//     });
+
+//     // Initial states for letters
+//     gsap.set(lettersRef.current, {
+//       y: 40,
+//       opacity: 0,
+//       filter: "blur(10px)",
+//       scale: 0.9
+//     });
+
+//     // Animate letters one by one with stagger
+//     tl.to(lettersRef.current, {
+//       y: 0,
+//       opacity: 1,
+//       filter: "blur(0px)",
+//       scale: 1,
+//       stagger: 0.08,
+//       duration: 0.8,
+//       onUpdate: () => {
+//         // Calculate approximate progress based on animation progress
+//         const progressFraction = tl.progress();
+//         setProgress(Math.min(progressFraction * 100, 100));
+//       }
+//     });
+
+//     // Hold moment
+//     tl.to({}, { duration: 0.5 });
+
+//     // Scale-up container before exit
+//     tl.to(containerRef.current, {
+//       scale: 1.1,
+//       duration: 0.6,
+//       ease: "power3.inOut"
+//     });
+
+//     // Fade + slide up exit
+//     tl.to(containerRef.current, {
+//       yPercent: -100,
+//       opacity: 0,
+//       duration: 1,
+//       ease: "power4.in",
+//       onComplete: () => {
+//         onComplete && onComplete();
+//       }
+//     });
+
+//     return () => tl.kill();
+//   }, [onComplete]);
+
+//   return (
+//     <>
+//       <style>{`
+//         .loading-screen {
+//           position: fixed;
+//           inset: 0;
+//           z-index: 9999;
+//           display: flex;
+//           justify-content: center;
+//           align-items: center;
+//           background: #000;
+//           overflow: hidden;
+//         }
+
+//         .loading-inner {
+//           display: flex;
+//           flex-direction: column;
+//           align-items: center;
+//           transform-origin: center;
+//           width: 320px;
+//         }
+
+//         .logo-text {
+//           display: flex;
+//           font-size: clamp(2.5rem, 6vw, 4rem);
+//           font-weight: 900;
+//           letter-spacing: 4px;
+//           text-transform: uppercase;
+//           margin-bottom: 16px;
+//           position: relative;
+//           z-index: 2;
+//         }
+
+//         .logo-text span {
+//           background: linear-gradient(
+//             90deg,
+//             #FFC107,
+//             #FF9800,
+//             #F97316
+//           );
+//           -webkit-background-clip: text;
+//           -webkit-text-fill-color: transparent;
+//           background-size: 200% 100%;
+//           animation: gradientMove 2.5s linear infinite;
+//           display: inline-block;
+//         }
+
+//         @keyframes gradientMove {
+//           0% { background-position: 0% center; }
+//           100% { background-position: 200% center; }
+//         }
+
+//         .loading-bar-container {
+//           width: 100%;
+//           height: 4px;
+//           background: rgba(255, 255, 255, 0.1);
+//           border-radius: 4px;
+//           overflow: hidden;
+//           position: relative;
+//           box-shadow: 0 0 8px rgba(255, 152, 0, 0.3);
+//         }
+
+//         .loading-bar-fill {
+//           height: 100%;
+//           width: 0%;
+//           background: linear-gradient(90deg, #FFC107, #FF9800, #F97316);
+//           box-shadow: 0 0 10px #FF9800, 0 0 20px #F97316;
+//           transition: width 0.1s ease-out;
+//           will-change: width;
+//         }
+
+//         .glow {
+//           position: absolute;
+//           width: 400px;
+//           height: 400px;
+//           background: radial-gradient(
+//             circle,
+//             rgba(255, 152, 0, 0.15),
+//             transparent 70%
+//           );
+//           filter: blur(80px);
+//           animation: pulse 4s ease-in-out infinite alternate;
+//           z-index: 0;
+//         }
+
+//         @keyframes pulse {
+//           from { transform: scale(1); opacity: 0.4; }
+//           to { transform: scale(1.3); opacity: 0.7; }
+//         }
+//       `}</style>
+
+//       <div className="loading-screen" ref={containerRef}>
+//         <div className="glow" />
+//         <div className="loading-inner">
+//           <div className="logo-text">
+//             {text.split("").map((char, i) => (
+//               <span
+//                 key={i}
+//                 ref={(el) => (lettersRef.current[i] = el)}
+//               >
+//                 {char}
+//               </span>
+//             ))}
+//           </div>
+
+//           <div className="loading-bar-container" aria-label="Loading progress bar">
+//             <div
+//               className="loading-bar-fill"
+//               style={{ width: `${progress}%` }}
+//             />
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
+
+// import { useEffect, useRef } from "react";
+// import gsap from "gsap";
+
+// export default function SequentialLoader({ onComplete }) {
+//   const containerRef = useRef(null);
+//   const text = "VEDACURATE".split("");
+//   const lettersRef = useRef([]);
+//   const fullWordRef = useRef(null);
+
+//   useEffect(() => {
+//     const tl = gsap.timeline({
+//       onComplete: () => onComplete?.()
+//     });
+
+//     // 1. Setup: Hide everything initially
+//     gsap.set(".single-char", { opacity: 0, scale: 0.8, filter: "blur(10px)" });
+//     gsap.set(fullWordRef.current, { opacity: 0, y: 20 });
+
+//     // 2. Individual Phase: One by one loading
+//     text.forEach((_, i) => {
+//       tl.to(`.char-${i}`, {
+//         opacity: 1,
+//         scale: 1.1,
+//         filter: "blur(0px)",
+//         duration: 0.3,
+//         ease: "power2.out",
+//       })
+//       .to(`.char-${i}`, {
+//         opacity: 0,
+//         scale: 1.2,
+//         filter: "blur(5px)",
+//         duration: 0.2,
+//         ease: "power2.in",
+//       }, "+=0.1"); // Small pause while the letter is visible
+//     });
+
+//     // 3. Global Phase: All characters load together
+//     tl.to(fullWordRef.current, {
+//       opacity: 1,
+//       y: 0,
+//       duration: 0.8,
+//       ease: "expo.out",
+//     }, "+=0.2");
+
+//     // Add a slight "glance" or shine effect across the full word
+//     tl.to(fullWordRef.current, {
+//         letterSpacing: "12px",
+//         duration: 1.5,
+//         ease: "power1.inOut"
+//     }, "-=0.5");
+
+//     // 4. Exit Phase: Slide up the whole page
+//     tl.to(containerRef.current, {
+//       yPercent: -100,
+//       duration: 1,
+//       ease: "power4.inOut"
+//     }, "+=0.5");
+
+//     return () => tl.kill();
+//   }, [onComplete, text]);
+
+//   return (
+//     <>
+//       <style>{`
+//         .loader-wrapper {
+//           position: fixed;
+//           inset: 0;
+//           z-index: 99999;
+//           background: #050505;
+//           display: flex;
+//           justify-content: center;
+//           align-items: center;
+//           overflow: hidden;
+//         }
+
+//         .stage {
+//           position: relative;
+//           display: flex;
+//           justify-content: center;
+//           align-items: center;
+//         }
+
+//         /* Styling for the letters that appear one-by-one */
+//         .single-char {
+//           position: absolute;
+//           font-size: clamp(3rem, 10vw, 6rem);
+//           font-weight: 900;
+//           color: #FF9800;
+//           text-shadow: 0 0 30px rgba(255, 152, 0, 0.6);
+//           text-transform: uppercase;
+//           pointer-events: none;
+//         }
+
+//         /* Styling for the final full word */
+//         .full-word {
+//           display: flex;
+//           font-size: clamp(2rem, 6vw, 4rem);
+//           font-weight: 900;
+//           letter-spacing: 4px;
+//           color: #ffffff;
+//           text-transform: uppercase;
+//         }
+
+//         .full-word span:nth-child(-n+4) {
+//           color: #FF9800;
+//         }
+
+//         .border-line {
+//             position: absolute;
+//             bottom: -20px;
+//             width: 0%;
+//             height: 2px;
+//             background: #FF9800;
+//         }
+//       `}</style>
+
+//       <div className="loader-wrapper" ref={containerRef}>
+//         <div className="stage">
+//           {/* Phase 1: Individual Letters (One by One) */}
+//           {text.map((char, i) => (
+//             <div key={`single-${i}`} className={`single-char char-${i}`}>
+//               {char}
+//             </div>
+//           ))}
+
+//           {/* Phase 2: Full Word Assembly */}
+//           <div className="full-word" ref={fullWordRef}>
+//             {text.map((char, i) => (
+//               <span key={`full-${i}`}>{char}</span>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
+
+// import { useEffect, useRef } from "react";
+// import gsap from "gsap";
+
+// // Import the sound file
+// import popSound from "../assets/pop.mp3"; // adjust path relative to this file
+
+// export default function SequentialLoader({ onComplete }) {
+//   const containerRef = useRef(null);
+//   const fullWordRef = useRef(null);
+//   const text = "VEDACURATE".split("");
+
+//   useEffect(() => {
+//     const tl = gsap.timeline({
+//       onComplete: () => onComplete?.()
+//     });
+
+//     // 1. Setup: Hide everything initially
+//     gsap.set(".single-char", { opacity: 0, scale: 0.8, filter: "blur(10px)" });
+//     gsap.set(fullWordRef.current, { opacity: 0, y: 20 });
+
+//     // Play the pop sound
+//     const playPopSound = () => {
+//       const audio = new Audio(popSound);
+//       audio.volume = 0.5;
+//       audio.play();
+//     };
+
+//     // 2. Individual Phase: One by one loading
+//     text.forEach((_, i) => {
+//       tl.to(`.char-${i}`, {
+//         opacity: 1,
+//         scale: 1.1,
+//         filter: "blur(0px)",
+//         duration: 0.3,
+//         ease: "power2.out",
+//         onStart: playPopSound
+//       })
+//       .to(`.char-${i}`, {
+//         opacity: 0,
+//         scale: 1.2,
+//         filter: "blur(5px)",
+//         duration: 0.2,
+//         ease: "power2.in",
+//       }, "+=0.1");
+//     });
+
+//     // 3. Full word
+//     tl.to(fullWordRef.current, {
+//       opacity: 1,
+//       y: 0,
+//       duration: 0.8,
+//       ease: "expo.out",
+//     }, "+=0.2");
+
+//     // Glance effect
+//     tl.to(fullWordRef.current, {
+//       letterSpacing: "12px",
+//       duration: 1.5,
+//       ease: "power1.inOut"
+//     }, "-=0.5");
+
+//     // 4. Exit
+//     tl.to(containerRef.current, {
+//       yPercent: -100,
+//       duration: 1,
+//       ease: "power4.inOut"
+//     }, "+=0.5");
+
+//     return () => tl.kill();
+//   }, [onComplete, text]);
+
+//   return (
+//     <>
+//       <style>{`
+//         .loader-wrapper {
+//           position: fixed;
+//           inset: 0;
+//           z-index: 99999;
+//           background: #050505;
+//           display: flex;
+//           justify-content: center;
+//           align-items: center;
+//           overflow: hidden;
+//         }
+
+//         .stage {
+//           position: relative;
+//           display: flex;
+//           justify-content: center;
+//           align-items: center;
+//         }
+
+//         .single-char {
+//           position: absolute;
+//           font-size: clamp(3rem, 10vw, 6rem);
+//           font-weight: 900;
+//           color: #FF9800;
+//           text-shadow: 0 0 30px rgba(255, 152, 0, 0.6);
+//           text-transform: uppercase;
+//           pointer-events: none;
+//         }
+
+//         .full-word {
+//           display: flex;
+//           font-size: clamp(2rem, 6vw, 4rem);
+//           font-weight: 900;
+//           letter-spacing: 4px;
+//           color: #ffffff;
+//           text-transform: uppercase;
+//         }
+
+//         .full-word span:nth-child(-n+4) {
+//           color: #FF9800;
+//         }
+//       `}</style>
+
+//       <div className="loader-wrapper" ref={containerRef}>
+//         <div className="stage">
+//           {text.map((char, i) => (
+//             <div key={`single-${i}`} className={`single-char char-${i}`}>
+//               {char}
+//             </div>
+//           ))}
+
+//           <div className="full-word" ref={fullWordRef}>
+//             {text.map((char, i) => (
+//               <span key={`full-${i}`}>{char}</span>
+//             ))}
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// }
+
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
-export default function LoadingScreen({ onComplete }) {
+export default function SequentialLoader({ onComplete }) {
   const containerRef = useRef(null);
-  const lettersRef = useRef([]);
-  const [progress, setProgress] = useState(0);
-  const text = "VEDACURATE";
+  const fullWordRef = useRef(null);
+  const text = "VEDACURATE".split("");
+
+  // Static audio from public folder
+  const soundUrl = "/assets/pop.mp3";
 
   useEffect(() => {
     const tl = gsap.timeline({
-      defaults: { ease: "power4.out" }
+      onComplete: () => onComplete?.()
     });
 
-    // Initial states for letters
-    gsap.set(lettersRef.current, {
-      y: 40,
-      opacity: 0,
-      filter: "blur(10px)",
-      scale: 0.9
+    // 1. Setup: Hide everything initially
+    gsap.set(".single-char", { opacity: 0, scale: 0.8, filter: "blur(10px)" });
+    gsap.set(fullWordRef.current, { opacity: 0, y: 20 });
+
+    // Function to play pop sound
+    const playPopSound = () => {
+      const audio = new Audio(soundUrl);
+      audio.volume = 0.5;
+      audio.play().catch(err => {
+        // Some browsers block autoplay on page load
+        console.log("Sound blocked by browser:", err);
+      });
+    };
+
+    // 2. Individual letters animation
+    text.forEach((_, i) => {
+      tl.to(`.char-${i}`, {
+        opacity: 1,
+        scale: 1.1,
+        filter: "blur(0px)",
+        duration: 0.3,
+        ease: "power2.out",
+        onStart: playPopSound
+      })
+      .to(`.char-${i}`, {
+        opacity: 0,
+        scale: 1.2,
+        filter: "blur(5px)",
+        duration: 0.2,
+        ease: "power2.in",
+      }, "+=0.1");
     });
 
-    // Animate letters one by one with stagger
-    tl.to(lettersRef.current, {
-      y: 0,
+    // 3. Full word assembly
+    tl.to(fullWordRef.current, {
       opacity: 1,
-      filter: "blur(0px)",
-      scale: 1,
-      stagger: 0.08,
+      y: 0,
       duration: 0.8,
-      onUpdate: () => {
-        // Calculate approximate progress based on animation progress
-        const progressFraction = tl.progress();
-        setProgress(Math.min(progressFraction * 100, 100));
-      }
-    });
+      ease: "expo.out",
+    }, "+=0.2");
 
-    // Hold moment
-    tl.to({}, { duration: 0.5 });
+    // Slight glance effect
+    tl.to(fullWordRef.current, {
+      letterSpacing: "12px",
+      duration: 1.5,
+      ease: "power1.inOut"
+    }, "-=0.5");
 
-    // Scale-up container before exit
-    tl.to(containerRef.current, {
-      scale: 1.1,
-      duration: 0.6,
-      ease: "power3.inOut"
-    });
-
-    // Fade + slide up exit
+    // 4. Exit the loader
     tl.to(containerRef.current, {
       yPercent: -100,
-      opacity: 0,
       duration: 1,
-      ease: "power4.in",
-      onComplete: () => {
-        onComplete && onComplete();
-      }
-    });
+      ease: "power4.inOut"
+    }, "+=0.5");
 
     return () => tl.kill();
-  }, [onComplete]);
+  }, [onComplete, text]);
 
   return (
     <>
       <style>{`
-        .loading-screen {
+        .loader-wrapper {
           position: fixed;
           inset: 0;
-          z-index: 9999;
+          z-index: 99999;
+          background: #050505;
           display: flex;
           justify-content: center;
           align-items: center;
-          background: #000;
           overflow: hidden;
         }
 
-        .loading-inner {
+        .stage {
+          position: relative;
           display: flex;
-          flex-direction: column;
+          justify-content: center;
           align-items: center;
-          transform-origin: center;
-          width: 320px;
         }
 
-        .logo-text {
+        .single-char {
+          position: absolute;
+          font-size: clamp(3rem, 10vw, 6rem);
+          font-weight: 900;
+          color: #FF9800;
+          text-shadow: 0 0 30px rgba(255, 152, 0, 0.6);
+          text-transform: uppercase;
+          pointer-events: none;
+        }
+
+        .full-word {
           display: flex;
-          font-size: clamp(2.5rem, 6vw, 4rem);
+          font-size: clamp(2rem, 6vw, 4rem);
           font-weight: 900;
           letter-spacing: 4px;
+          color: #ffffff;
           text-transform: uppercase;
-          margin-bottom: 16px;
-          position: relative;
-          z-index: 2;
         }
 
-        .logo-text span {
-          background: linear-gradient(
-            90deg,
-            #FFC107,
-            #FF9800,
-            #F97316
-          );
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-size: 200% 100%;
-          animation: gradientMove 2.5s linear infinite;
-          display: inline-block;
-        }
-
-        @keyframes gradientMove {
-          0% { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-
-        .loading-bar-container {
-          width: 100%;
-          height: 4px;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-          overflow: hidden;
-          position: relative;
-          box-shadow: 0 0 8px rgba(255, 152, 0, 0.3);
-        }
-
-        .loading-bar-fill {
-          height: 100%;
-          width: 0%;
-          background: linear-gradient(90deg, #FFC107, #FF9800, #F97316);
-          box-shadow: 0 0 10px #FF9800, 0 0 20px #F97316;
-          transition: width 0.1s ease-out;
-          will-change: width;
-        }
-
-        .glow {
-          position: absolute;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(
-            circle,
-            rgba(255, 152, 0, 0.15),
-            transparent 70%
-          );
-          filter: blur(80px);
-          animation: pulse 4s ease-in-out infinite alternate;
-          z-index: 0;
-        }
-
-        @keyframes pulse {
-          from { transform: scale(1); opacity: 0.4; }
-          to { transform: scale(1.3); opacity: 0.7; }
+        .full-word span:nth-child(-n+4) {
+          color: #FF9800;
         }
       `}</style>
 
-      <div className="loading-screen" ref={containerRef}>
-        <div className="glow" />
-        <div className="loading-inner">
-          <div className="logo-text">
-            {text.split("").map((char, i) => (
-              <span
-                key={i}
-                ref={(el) => (lettersRef.current[i] = el)}
-              >
-                {char}
-              </span>
-            ))}
-          </div>
+      <div className="loader-wrapper" ref={containerRef}>
+        <div className="stage">
+          {/* Individual letters */}
+          {text.map((char, i) => (
+            <div key={`single-${i}`} className={`single-char char-${i}`}>
+              {char}
+            </div>
+          ))}
 
-          <div className="loading-bar-container" aria-label="Loading progress bar">
-            <div
-              className="loading-bar-fill"
-              style={{ width: `${progress}%` }}
-            />
+          {/* Full word */}
+          <div className="full-word" ref={fullWordRef}>
+            {text.map((char, i) => (
+              <span key={`full-${i}`}>{char}</span>
+            ))}
           </div>
         </div>
       </div>
