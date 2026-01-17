@@ -1040,30 +1040,38 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
+// Loader component
 export default function SequentialLoader({ onComplete }) {
   const containerRef = useRef(null);
   const fullWordRef = useRef(null);
   const text = "VEDACURATE".split("");
 
-  // Static audio from public folder
-  const soundUrl = "/assets/pop.mp3";
+  // Preload audio from public folder
+  const popAudio = useRef(null);
 
   useEffect(() => {
+    // Create audio only once
+    popAudio.current = new Audio("/assets/pop.mp3");
+    popAudio.current.volume = 0.5;
+
     const tl = gsap.timeline({
       onComplete: () => onComplete?.()
     });
 
-    // 1. Setup: Hide everything initially
+    // 1. Setup
     gsap.set(".single-char", { opacity: 0, scale: 0.8, filter: "blur(10px)" });
     gsap.set(fullWordRef.current, { opacity: 0, y: 20 });
 
-    // Function to play pop sound
+    // Function to play sound safely
     const playPopSound = () => {
-      const audio = new Audio(soundUrl);
-      audio.volume = 0.5;
+      const audio = popAudio.current;
+      if (!audio) return;
+
+      // Reset audio to allow rapid replay
+      audio.currentTime = 0;
       audio.play().catch(err => {
-        // Some browsers block autoplay on page load
-        console.log("Sound blocked by browser:", err);
+        // This happens if browser blocks autoplay
+        console.log("Audio blocked:", err);
       });
     };
 
@@ -1086,7 +1094,7 @@ export default function SequentialLoader({ onComplete }) {
       }, "+=0.1");
     });
 
-    // 3. Full word assembly
+    // 3. Full word
     tl.to(fullWordRef.current, {
       opacity: 1,
       y: 0,
@@ -1094,14 +1102,14 @@ export default function SequentialLoader({ onComplete }) {
       ease: "expo.out",
     }, "+=0.2");
 
-    // Slight glance effect
+    // Glance effect
     tl.to(fullWordRef.current, {
       letterSpacing: "12px",
       duration: 1.5,
       ease: "power1.inOut"
     }, "-=0.5");
 
-    // 4. Exit the loader
+    // 4. Exit
     tl.to(containerRef.current, {
       yPercent: -100,
       duration: 1,
@@ -1158,14 +1166,11 @@ export default function SequentialLoader({ onComplete }) {
 
       <div className="loader-wrapper" ref={containerRef}>
         <div className="stage">
-          {/* Individual letters */}
           {text.map((char, i) => (
             <div key={`single-${i}`} className={`single-char char-${i}`}>
               {char}
             </div>
           ))}
-
-          {/* Full word */}
           <div className="full-word" ref={fullWordRef}>
             {text.map((char, i) => (
               <span key={`full-${i}`}>{char}</span>
