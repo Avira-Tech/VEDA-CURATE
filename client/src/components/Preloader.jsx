@@ -1052,7 +1052,6 @@ export default function SequentialLoader({ onComplete }) {
   useEffect(() => {
     // Create audio only once
     popAudio.current = new Audio("/assets/pop.mp3");
-    popAudio.current.volume = 0.5;
 
     const tl = gsap.timeline({
       onComplete: () => onComplete?.()
