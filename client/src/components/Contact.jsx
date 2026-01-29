@@ -23,6 +23,7 @@ export default function Contact() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -56,46 +57,77 @@ export default function Contact() {
   };
 
   const InputWrapper = ({ name, label, children }) => (
-    <div className="input-field-container">
+    <div className="relative mb-8">
       {children}
-      <label className={`floating-label ${formData[name] || focusedField === name ? 'active' : ''}`}>
+      <label className={`absolute left-5 top-5 text-white/30 transition-all duration-300 pointer-events-none z-10 ${
+        formData[name] || focusedField === name 
+          ? "-top-2.5 left-3.5 text-xs text-brand-orange-400 font-bold bg-[#080808] px-2 py-0.5 z-20" 
+          : ""
+      }`}>
         {label}
       </label>
-      <div className={`input-focus-glow ${focusedField === name ? 'active' : ''}`} />
+      <div className={`absolute inset-0 rounded-xl border border-brand-orange-400 opacity-0 transition-opacity duration-300 pointer-events-none ${
+        focusedField === name ? "opacity-100 shadow-[0_0_20px_rgba(255,152,0,0.15)]" : ""
+      }`} />
     </div>
   );
 
   return (
-    <section id="contact" ref={sectionRef} className="contact-section">
-      
-      {/* Decorative Blur Orbs */}
-      <div className="bg-orb-contact" />
+    <section 
+      id="contact" 
+      ref={sectionRef}
+      className="min-h-screen flex items-center py-[100px] px-[8%] relative overflow-hidden lg:py-20 lg:px-5"
+    >
+      {/* Decorative Blur Orb */}
+      <div 
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          top: "50%",
+          left: "50%",
+          width: "800px",
+          height: "800px",
+          background: "radial-gradient(circle, rgba(255, 152, 0, 0.03) 0%, transparent 70%)",
+          transform: "translate(-50%, -50%)",
+          filter: "blur(100px)"
+        }}
+      />
 
-      <div className="contact-grid">
+      <div className="grid lg:grid-cols-2 gap-[100px] w-full relative z-10 max-w-[1400px]mx-auto lg:grid-cols-1 lg:gap-15">
         
         {/* Left Side: Contact Details */}
-        <div className={`contact-info-block ${isVisible ? 'animate-in' : ''}`}>
-          <div className="contact-badge">Available for Work</div>
-          <h2 className="contact-heading">
-            Let’s Build <br />
-            <span className="magic-text">Something Amazing</span>
+        <div className={`transition-all duration-1000 ease-out ${
+          isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-12"
+        }`}>
+          <div className="inline-block px-5 py-2 rounded-full bg-brand-orange-400/10 border border-brand-orange-400/30 text-brand-orange-400 text-xs font-bold uppercase tracking-[1px] mb-5">
+            Available for Work
+          </div>
+          <h2 className="text-[clamp(2.5rem,5vw,4.2rem)] font-black text-white leading-tight mb-6">
+            Let's Build <br />
+            <span className="text-transparent bg-gradient-to-r from-brand-orange-400 via-brand-orange-600 to-brand-orange-400 bg-[length:200%_auto] bg-clip-text animate-gradient-shift" style={{ WebkitTextStroke: "1px rgba(255, 152, 0, 0.4)" }}>
+              Something Amazing
+            </span>
           </h2>
-          <p className="contact-p">
+          <p className="text-[1.15rem] text-white/50 leading-relaxed mb-12 max-w-[500px]">
             Ready to transform your ideas into digital reality? Our team is waiting to 
             channel the magic into your next project.
           </p>
 
-          <div className="social-proof-cards">
+          <div className="flex flex-col gap-5">
             {[
-              { i: "📧", l: "Direct Email", v: "Vedacurate@gmail.com" },
+              { i: "📧", l: "Direct Email", v: "vedacurate@gmail.com" },
               { i: "📱", l: "Call Us", v: "+91 85399 06485" },
               { i: "📍", l: "HQ Location", v: "Pune, IN" }
             ].map((item, i) => (
-              <div key={i} className="magnetic-card">
-                <div className="card-icon-box">{item.i}</div>
-                <div className="card-text">
-                  <span className="card-label">{item.l}</span>
-                  <span className="card-value">{item.v}</span>
+              <div 
+                key={i} 
+                className="flex items-center gap-5 p-6 rounded-2xl bg-white/2 border border-white/8 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] hover:translate-x-4 hover:border-brand-orange-400/50 hover:bg-brand-orange-400/5"
+              >
+                <div className="w-12 h-12 rounded-xl bg-brand-orange-400/10 flex items-center justify-center text-xl">
+                  {item.i}
+                </div>
+                <div>
+                  <span className="block text-[0.7rem] text-white/30 uppercase tracking-[1px]">{item.l}</span>
+                  <span className="text-lg font-bold text-white">{item.v}</span>
                 </div>
               </div>
             ))}
@@ -103,196 +135,114 @@ export default function Contact() {
         </div>
 
         {/* Right Side: Glassmorphism Form */}
-        <div className={`form-container-glass ${isVisible ? 'animate-in-delayed' : ''}`}>
+        <div className={`relative rounded-[40px] p-12 overflow-hidden transition-all duration-1000 ease-out delay-200 lg:p-10 ${
+          isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-12"
+        }`}
+          style={{
+            background: "rgba(255, 255, 255, 0.01)",
+            backdropFilter: "blur(30px)",
+            border: "1px solid rgba(255, 255, 255, 0.1)"
+          }}
+        >
+          {/* Success Screen */}
           {isSubmitted && (
-            <div className="success-screen">
-              <div className="success-icon">✓</div>
-              <h3>Message Sent!</h3>
-              <p>We'll get back to you within 24 hours.</p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-[#080808] z-10">
+              <div className="w-20 h-20 rounded-full bg-green-500 text-white text-[2.5rem] flex items-center justify-center mb-5 shadow-[0_0_30px_rgba(34,197,94,0.4)]">
+                ✓
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+              <p className="text-white/60">We'll get back to you within 24 hours.</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} style={{ opacity: isSubmitted ? 0 : 1 }}>
-            <div className="form-header">
-               <h3>Send a Message</h3>
-               <p>Field your inquiry below.</p>
+          <form onSubmit={handleSubmit} className={isSubmitted ? "opacity-0" : ""}>
+            <div className="mb-10">
+              <h3 className="text-2xl font-bold text-white mb-2">Send a Message</h3>
+              <p className="text-white/40 text-sm">Field your inquiry below.</p>
             </div>
 
             <InputWrapper name="name" label="Your Name">
               <input 
-                className="glass-input"
+                className="w-full bg-transparent border border-white/10 rounded-xl py-5 px-5 text-white text-base outline-none transition-all duration-300"
+                style={{ position: "relative", zIndex: 2 }}
                 onFocus={() => setFocusedField('name')}
                 onBlur={() => setFocusedField(null)}
-                name="name" value={formData.name} onChange={handleChange}
+                name="name" 
+                value={formData.name} 
+                onChange={handleChange}
                 required
               />
             </InputWrapper>
 
             <InputWrapper name="email" label="Email Address">
               <input 
-                className="glass-input"
+                className="w-full bg-transparent border border-white/10 rounded-xl py-5 px-5 text-white text-base outline-none transition-all duration-300"
+                style={{ position: "relative", zIndex: 2 }}
                 type="email"
                 onFocus={() => setFocusedField('email')}
                 onBlur={() => setFocusedField(null)}
-                name="email" value={formData.email} onChange={handleChange}
+                name="email" 
+                value={formData.email} 
+                onChange={handleChange}
                 required
               />
             </InputWrapper>
 
             <InputWrapper name="projectType" label="Project Type">
               <select 
-                className="glass-input glass-select"
+                className="w-full bg-transparent border border-white/10 rounded-xl py-5 px-5 text-white text-base outline-none transition-all duration-300 cursor-pointer appearance-none"
+                style={{ position: "relative", zIndex: 2 }}
                 onFocus={() => setFocusedField('projectType')}
                 onBlur={() => setFocusedField(null)}
-                name="projectType" value={formData.projectType} onChange={handleChange}
+                name="projectType" 
+                value={formData.projectType} 
+                onChange={handleChange}
                 required
               >
-                <option value=""></option>
-                {projectTypes.map(t => <option key={t} value={t} style={{background: '#111'}}>{t}</option>)}
+                <option value="" className="bg-[#111]"></option>
+                {projectTypes.map(t => (
+                  <option key={t} value={t} className="bg-[#111]">{t}</option>
+                ))}
               </select>
+              {/* Custom dropdown arrow */}
+              <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ zIndex: 2 }}>
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                  <path d="M1 1.5L6 6.5L11 1.5" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
             </InputWrapper>
 
             <InputWrapper name="message" label="Your Project Vision">
               <textarea 
-                className="glass-input glass-textarea"
+                className="w-full bg-transparent border border-white/10 rounded-xl py-5 px-5 text-white text-base outline-none transition-all duration-300 resize-none"
+                style={{ position: "relative", zIndex: 2 }}
+                rows="4"
                 onFocus={() => setFocusedField('message')}
                 onBlur={() => setFocusedField(null)}
-                name="message" value={formData.message} onChange={handleChange}
-                rows="4" required
+                name="message" 
+                value={formData.message} 
+                onChange={handleChange}
+                required
               />
             </InputWrapper>
 
-            <button type="submit" className="magic-submit-btn" disabled={isSubmitting}>
-              <div className="shimmer" />
-              <span>{isSubmitting ? "Sending..." : "Send Message"}</span>
+            <button 
+              type="submit" 
+              className="w-full py-5 rounded-xl border-0 bg-gradient-to-r from-brand-orange-400 to-brand-orange-600 text-white font-bold text-lg cursor-pointer relative overflow-hidden transition-all duration-400 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(255,87,34,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSubmitting}
+            >
+              {/* Shimmer effect */}
+              <div 
+                className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] animate-shimmer"
+              />
+              <span className="relative z-10">
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </span>
             </button>
           </form>
         </div>
       </div>
-
-      <style>{`
-        .contact-section {
-          min-height: 100vh;
-          padding: 100px 8%;
-          background: transparent;
-          display: flex;
-          align-items: center;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .contact-grid { 
-          display: grid; 
-          grid-template-columns: 1fr 1fr; 
-          gap: 100px; 
-          width: 100%; 
-          position: relative; 
-          z-index: 5;
-        }
-
-        .magic-text {
-          color: transparent;
-          -webkit-text-stroke: 1px rgba(255, 152, 0, 0.4);
-          background: linear-gradient(90deg, #ff9800, #ff5722, #ffcc33, #ff9800);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          background-clip: text;
-          animation: liquidFlow 4s linear infinite;
-        }
-
-        @keyframes liquidFlow {
-          to { background-position: 200% center; }
-        }
-
-        .contact-badge {
-          display: inline-block; padding: 6px 18px; background: rgba(255,152,0,0.1); 
-          border: 1px solid rgba(255,152,0,0.3); border-radius: 50px; color: #ff9800;
-          font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem; margin-bottom: 20px;
-        }
-
-        .contact-heading { font-size: clamp(2.5rem, 5vw, 4.2rem); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 25px; }
-        .contact-p { color: rgba(255,255,255,0.5); font-size: 1.15rem; line-height: 1.8; margin-bottom: 50px; max-width: 500px; }
-
-        .social-proof-cards { display: flex; flex-direction: column; gap: 20px; }
-        .magnetic-card {
-          display: flex; align-items: center; gap: 20px; padding: 25px;
-          background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 20px; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .magnetic-card:hover { transform: translateX(15px); border-color: #ff9800; background: rgba(255,152,0,0.05); }
-        .card-icon-box { font-size: 1.5rem; width: 50px; height: 50px; background: rgba(255,152,0,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-        .card-label { display: block; font-size: 0.7rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; }
-        .card-value { font-weight: 700; color: #fff; font-size: 1.1rem; }
-
-        /* Glass Form */
-        .form-container-glass {
-          background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(30px);
-          border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 40px;
-          padding: 60px; position: relative; overflow: hidden;
-        }
-        .form-header h3 { color: #fff; font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
-        .form-header p { color: rgba(255,255,255,0.4); margin-bottom: 40px; font-size: 0.9rem; }
-
-        .input-field-container { position: relative; margin-bottom: 30px; }
-        .glass-input {
-          width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 16px; padding: 20px; color: #fff; font-size: 1rem; outline: none;
-          transition: 0.3s; position: relative; z-index: 2;
-        }
-        .glass-textarea { resize: none; }
-        .glass-select { cursor: pointer; appearance: none; }
-
-        .floating-label {
-          position: absolute; left: 20px; top: 20px; color: rgba(255,255,255,0.3);
-          transition: 0.3s; pointer-events: none; z-index: 1;
-        }
-        .floating-label.active { top: -10px; left: 15px; font-size: 0.75rem; color: #ff9800; background: #080808; padding: 0 8px; font-weight: 700; z-index: 3; }
-
-        .input-focus-glow {
-          position: absolute; inset: 0; border: 1px solid #ff9800; border-radius: 16px;
-          opacity: 0; transition: 0.3s; pointer-events: none;
-        }
-        .input-focus-glow.active { opacity: 1; box-shadow: 0 0 20px rgba(255,152,0,0.15); }
-
-        .magic-submit-btn {
-          width: 100%; padding: 20px; border-radius: 16px; border: none;
-          background: linear-gradient(135deg, #ff9800, #ff5722);
-          color: #fff; font-weight: 800; font-size: 1.1rem; cursor: pointer;
-          position: relative; overflow: hidden; transition: 0.4s;
-          box-shadow: 0 10px 30px rgba(255, 87, 34, 0.3);
-        }
-        .magic-submit-btn:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(255, 87, 34, 0.5); }
-        .shimmer {
-          position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-          transform: skewX(-20deg); animation: shimmer 3s infinite;
-        }
-        @keyframes shimmer { 100% { left: 200%; } }
-
-        .success-screen {
-          position: absolute; inset: 0; display: flex; flex-direction: column;
-          align-items: center; justify-content: center; text-align: center;
-          background: #080808; z-index: 10;
-        }
-        .success-icon { width: 80px; height: 80px; background: #22c55e; color: #fff; border-radius: 50%; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 0 30px rgba(34, 197, 94, 0.4); }
-
-        .animate-in { animation: slideRight 1s forwards; }
-        .animate-in-delayed { animation: slideLeft 1s forwards; }
-        @keyframes slideRight { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes slideLeft { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-
-        @media (max-width: 992px) {
-          .contact-section { padding: 80px 5%; }
-          .contact-grid { grid-template-columns: 1fr; gap: 60px; }
-          .form-container-glass { padding: 40px; }
-        }
-
-        @media (max-width: 480px) {
-          .contact-section { padding: 60px 5%; }
-          .form-container-glass { padding: 25px; }
-          .contact-heading { font-size: 2.5rem; }
-        }
-      `}</style>
     </section>
   );
 }
+

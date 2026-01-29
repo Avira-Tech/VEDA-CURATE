@@ -1,512 +1,16 @@
-// import { useState, useEffect } from "react";
-// import logo from "../assets/logo.png";
-
-// export default function Navbar() {
-//   const [scrolled, setScrolled] = useState(false);
-//   const [logoLoaded, setLogoLoaded] = useState(false);
-//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-//   useEffect(() => {
-//     // Trigger logo animation after mount
-//     setLogoLoaded(true);
-
-//     // Scroll handler
-//     const handleScroll = () => {
-//       setScrolled(window.scrollY > 50);
-//     };
-
-//     window.addEventListener("scroll", handleScroll);
-//     return () => window.removeEventListener("scroll", handleScroll);
-//   }, []);
-
-//   const navLinks = [
-//     { name: "Home", href: "#hero" },
-//     { name: "About", href: "#about" },
-//     { name: "Services", href: "#services" },
-//     { name: "Work", href: "#projects" },
-//     { name: "Clients", href: "#clients" },
-//     { name: "Contact", href: "#contact" },
-//   ];
-
-//   const scrollToSection = (href) => {
-//     const element = document.querySelector(href);
-//     if (element) {
-//       element.scrollIntoView({ behavior: "smooth" });
-//     }
-//     setMobileMenuOpen(false);
-//   };
-
-//   return (
-//     <nav
-//       className={`navbar ${scrolled ? "scrolled" : ""}`}
-//       style={{
-//         position: "fixed",
-//         top: 0,
-//         left: 0,
-//         right: 0,
-//         zIndex: 1000,
-//         padding: scrolled ? "15px 10%" : "20px 10%",
-//         display: "flex",
-//         justifyContent: "space-between",
-//         alignItems: "center",
-//         background: scrolled ? "rgba(11, 11, 11, 0.85)" : "transparent",
-//         backdropFilter: scrolled ? "blur(20px)" : "none",
-//         WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-//         borderBottom: scrolled ? "1px solid rgba(255, 152, 0, 0.15)" : "none",
-//         transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-//       }}
-//     >
-//       {/* Logo */}
-//       <div
-//         style={{
-//           display: "flex",
-//           alignItems: "center",
-//           gap: "12px",
-//           cursor: "pointer",
-//         }}
-//         onClick={() => scrollToSection("#hero")}
-//         className="interactive-card"
-//       >
-//         <img
-//           src={logo}
-//           alt="Vedacurate Logo"
-//           className="logo-image"
-//           style={{
-//             width: "45px",
-//             height: "45px",
-//             objectFit: "contain",
-//             transform: logoLoaded
-//               ? "scale(1) rotate(0deg)"
-//               : "scale(0) rotate(-180deg)",
-//             opacity: logoLoaded ? 1 : 0,
-//             transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
-//             filter: logoLoaded
-//               ? "drop-shadow(0 0 30px rgba(255, 152, 0, 0.4))"
-//               : "none",
-//           }}
-//           onLoad={() => setLogoLoaded(true)}
-//         />
-//         <span
-//           className="logo-text"
-//           style={{
-//             fontSize: "2.2rem",
-//             fontWeight: "700",
-//             background: "linear-gradient(135deg, #ff9800, #ff5722)",
-//             WebkitBackgroundClip: "text",
-//             WebkitTextFillColor: "transparent",
-//             backgroundClip: "text",
-//             opacity: logoLoaded ? 1 : 0,
-//             transform: logoLoaded ? "translateX(0)" : "translateX(-20px)",
-//             transition: "all 0.6s ease 0.3s",
-//           }}
-//         >
-//           Vedacurate
-//         </span>
-//       </div>
-
-//       {/* Desktop Navigation */}
-//       <div
-//         style={{
-//           display: "flex",
-//           gap: "40px",
-//         }}
-//         className="nav-links"
-//       >
-//         {navLinks.map((link, index) => (
-//           <a
-//             key={link.name}
-//             href={link.href}
-//             onClick={(e) => {
-//               e.preventDefault();
-//               scrollToSection(link.href);
-//             }}
-//             style={{
-//               color: "white",
-//               fontWeight: "500",
-//               fontSize: "1.15rem",
-//               position: "relative",
-//               padding: "8px 0",
-//               opacity: logoLoaded ? 1 : 0,
-//               transform: logoLoaded ? "translateY(0)" : "translateY(-10px)",
-//               transition: "all 0.3s ease",
-//               transitionDelay: `${0.5 + index * 0.1}s`,
-//             }}
-//             className="nav-link"
-//           >
-//             {link.name}
-//             <span
-//               style={{
-//                 position: "absolute",
-//                 bottom: 0,
-//                 left: 0,
-//                 width: "0%",
-//                 height: "2px",
-//                 background: "linear-gradient(90deg, #ff9800, #ff5722)",
-//                 transition: "width 0.3s ease",
-//               }}
-//               className="nav-link-underline"
-//             />
-//           </a>
-//         ))}
-//       </div>
-
-//       {/* CTA Button */}
-//       <div
-//         style={{
-//           opacity: logoLoaded ? 1 : 0,
-//           transform: logoLoaded ? "scale(1)" : "scale(0.8)",
-//           transition: "all 0.6s ease 0.6s",
-//         }}
-//         className="cta-button"
-//       >
-//         <button
-//           onClick={() => scrollToSection("#contact")}
-//           style={{
-//             background: "linear-gradient(135deg, #ff9800, #ff5722)",
-//             border: "none",
-//             padding: "14px 32px",
-//             color: "white",
-//             borderRadius: "12px",
-//             fontWeight: "600",
-//             fontSize: "1.1rem",
-//             cursor: "pointer",
-//             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-//             boxShadow: "0 4px 25px rgba(255, 152, 0, 0.35)",
-//             position: "relative",
-//             overflow: "hidden",
-//           }}
-//           onMouseEnter={(e) => {
-//             e.target.style.transform = "translateY(-3px) scale(1.02)";
-//             e.target.style.boxShadow = "0 8px 35px rgba(255, 152, 0, 0.45)";
-//           }}
-//           onMouseLeave={(e) => {
-//             e.target.style.transform = "translateY(0) scale(1)";
-//             e.target.style.boxShadow = "0 4px 25px rgba(255, 152, 0, 0.35)";
-//           }}
-//         >
-//           <span style={{ position: "relative", zIndex: 1 }}>Let's Talk</span>
-//         </button>
-//       </div>
-
-//       {/* Mobile Menu Toggle */}
-//       <button
-//         className="mobile-menu-toggle"
-//         style={{
-//           display: "none",
-//           background: "transparent",
-//           border: "none",
-//           color: "white",
-//           fontSize: "1.5rem",
-//           cursor: "pointer",
-//           padding: "10px",
-//         }}
-//         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-//         aria-label="Toggle menu"
-//       >
-//         {mobileMenuOpen ? "✕" : "☰"}
-//       </button>
-
-//       {/* Mobile Menu Overlay */}
-//       {mobileMenuOpen && (
-//         <div
-//           className="mobile-menu"
-//           style={{
-//             position: "fixed",
-//             top: 0,
-//             left: 0,
-//             right: 0,
-//             bottom: 0,
-//             background: "rgba(11, 11, 11, 0.98)",
-//             backdropFilter: "blur(20px)",
-//             zIndex: 999,
-//             display: "flex",
-//             flexDirection: "column",
-//             alignItems: "center",
-//             justifyContent: "center",
-//             gap: "30px",
-//             animation: "fadeIn 0.3s ease",
-//           }}
-//         >
-//           {navLinks.map((link) => (
-//             <a
-//               key={link.name}
-//               href={link.href}
-//               onClick={(e) => {
-//                 e.preventDefault();
-//                 scrollToSection(link.href);
-//               }}
-//               style={{
-//                 color: "white",
-//                 fontSize: "1.8rem",
-//                 fontWeight: "600",
-//                 textDecoration: "none",
-//               }}
-//             >
-//               {link.name}
-//             </a>
-//           ))}
-//           <button
-//             onClick={() => scrollToSection("#contact")}
-//             style={{
-//               background: "linear-gradient(135deg, #ff9800, #ff5722)",
-//               border: "none",
-//               padding: "16px 40px",
-//               color: "white",
-//               borderRadius: "12px",
-//               fontWeight: "600",
-//               fontSize: "1rem",
-//               cursor: "pointer",
-//               marginTop: "20px",
-//             }}
-//           >
-//             Let's Talk
-//           </button>
-//         </div>
-//       )}
-//     </nav>
-//   );
-// }
-
-// import { useState, useEffect } from "react";
-// import logo from "../assets/logo.png";
-
-// export default function Navbar() {
-//   const [scrolled, setScrolled] = useState(false);
-//   const [logoLoaded, setLogoLoaded] = useState(false);
-//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-//   useEffect(() => {
-//     setLogoLoaded(true);
-//     const handleScroll = () => setScrolled(window.scrollY > 40);
-//     window.addEventListener("scroll", handleScroll);
-//     return () => window.removeEventListener("scroll", handleScroll);
-//   }, []);
-
-//   const navLinks = [
-//     { name: "Home", href: "#hero" },
-//     { name: "About", href: "#about" },
-//     { name: "Services", href: "#services" },
-//     { name: "Work", href: "#projects" },
-//     { name: "Contact", href: "#contact" },
-//   ];
-
-//   const scrollToSection = (href) => {
-//     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-//     setMobileMenuOpen(false);
-//   };
-
-//   return (
-//     <nav
-//       className={`navbar-container ${scrolled ? "scrolled" : ""}`}
-//       style={{
-//         position: "fixed",
-//         top: scrolled ? "20px" : "0px",
-//         left: "0",
-//         right: "0",
-//         zIndex: 1000,
-//         padding: "0 5%",
-//         transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-//       }}
-//     >
-//       <div
-//         className="navbar-inner"
-//         style={{
-//           maxWidth: scrolled ? "1200px" : "100%",
-//           margin: "0 auto",
-//           display: "flex",
-//           justifyContent: "space-between",
-//           alignItems: "center",
-//           padding: scrolled ? "12px 30px" : "30px 5%",
-//           background: scrolled ? "rgba(11, 11, 11, 0.75)" : "transparent",
-//           backdropFilter: scrolled ? "blur(15px)" : "none",
-//           WebkitBackdropFilter: scrolled ? "blur(15px)" : "none",
-//           borderRadius: scrolled ? "100px" : "0px",
-//           border: scrolled ? "1px solid rgba(255, 152, 0, 0.2)" : "1px solid transparent",
-//           transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-//         }}
-//       >
-//         {/* Logo Section */}
-//         <div
-//           style={{ display: "flex", alignItems: "center", gap: "12px", cursor: "pointer" }}
-//           onClick={() => scrollToSection("#hero")}
-//         >
-//           <img
-//             src={logo}
-//             alt="Vedacurate"
-//             style={{
-//               width: scrolled ? "35px" : "45px",
-//               height: "auto",
-//               filter: "drop-shadow(0 0 10px rgba(255, 152, 0, 0.3))",
-//               transition: "all 0.5s ease"
-//             }}
-//           />
-//           <span
-//             style={{
-//               fontSize: scrolled ? "1.4rem" : "1.8rem",
-//               fontWeight: "800",
-//               letterSpacing: "-1px",
-//               background: "linear-gradient(to right, #ff9800, #ff5722)",
-//               WebkitBackgroundClip: "text",
-//               WebkitTextFillColor: "transparent",
-//               transition: "all 0.5s ease"
-//             }}
-//           >
-//             Vedacurate
-//           </span>
-//         </div>
-
-//         {/* Desktop Links */}
-//         <div className="desktop-links" style={{ display: "flex", gap: "35px", alignItems: "center" }}>
-//           {navLinks.map((link) => (
-//             <a
-//               key={link.name}
-//               href={link.href}
-//               onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-//               className="nav-item"
-//               style={{
-//                 color: "rgba(255,255,255,0.7)",
-//                 textDecoration: "none",
-//                 fontSize: "0.95rem",
-//                 fontWeight: "600",
-//                 letterSpacing: "0.5px",
-//                 position: "relative",
-//                 padding: "5px 0",
-//                 transition: "color 0.3s ease"
-//               }}
-//             >
-//               {link.name}
-//               <span className="nav-underline" />
-//             </a>
-//           ))}
-          
-//           <button
-//             onClick={() => scrollToSection("#contact")}
-//             className="talk-btn"
-//             style={{
-//               background: "linear-gradient(135deg, #ff9800, #ff5722)",
-//               color: "white",
-//               border: "none",
-//               padding: scrolled ? "10px 24px" : "12px 28px",
-//               borderRadius: "50px",
-//               fontWeight: "700",
-//               fontSize: "0.9rem",
-//               cursor: "pointer",
-//               marginLeft: "10px",
-//               boxShadow: "0 10px 20px rgba(255, 87, 34, 0.2)",
-//               transition: "all 0.3s ease"
-//             }}
-//           >
-//             Let's Talk
-//           </button>
-//         </div>
-
-//         {/* Mobile Toggle */}
-//         <button 
-//           className="mobile-toggle" 
-//           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-//           style={{ display: "none", background: "transparent", border: "none", color: "white", cursor: "pointer" }}
-//         >
-//           <div className={`burger ${mobileMenuOpen ? 'open' : ''}`}>
-//             <span></span>
-//             <span></span>
-//           </div>
-//         </button>
-//       </div>
-
-//       {/* Mobile Menu Overlay */}
-//       <div className={`mobile-overlay ${mobileMenuOpen ? 'active' : ''}`}>
-//         {navLinks.map((link, i) => (
-//           <a 
-//             key={link.name} 
-//             href={link.href} 
-//             style={{ transitionDelay: `${i * 0.1}s` }}
-//             onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-//           >
-//             {link.name}
-//           </a>
-//         ))}
-//       </div>
-
-//       <style>{`
-//         @media (max-width: 992px) {
-//           .desktop-links { display: none !important; }
-//           .mobile-toggle { display: block !important; }
-//         }
-
-//         .nav-item:hover { color: #fff !important; }
-//         .nav-item:hover .nav-underline { width: 100%; }
-
-//         .nav-underline {
-//           position: absolute;
-//           bottom: 0;
-//           left: 0;
-//           width: 0;
-//           height: 2px;
-//           background: #ff9800;
-//           transition: width 0.3s ease;
-//         }
-
-//         .talk-btn:hover {
-//           transform: translateY(-2px);
-//           box-shadow: 0 15px 30px rgba(255, 87, 34, 0.4);
-//         }
-
-//         /* Burger Icon */
-//         .burger span {
-//           display: block;
-//           width: 25px;
-//           height: 2px;
-//           background: white;
-//           margin: 6px 0;
-//           transition: 0.4s;
-//         }
-//         .burger.open span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 6px); }
-//         .burger.open span:nth-child(2) { transform: rotate(45deg) translate(-5px, -7px); }
-
-//         /* Mobile Overlay */
-//         .mobile-overlay {
-//           position: fixed;
-//           top: 0;
-//           left: 0;
-//           width: 100%;
-//           height: 0;
-//           background: rgba(8, 8, 8, 0.98);
-//           backdrop-filter: blur(20px);
-//           overflow: hidden;
-//           display: flex;
-//           flex-direction: column;
-//           align-items: center;
-//           justify-content: center;
-//           transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-//           z-index: -1;
-//         }
-//         .mobile-overlay.active { height: 100vh; }
-//         .mobile-overlay a {
-//           color: white;
-//           font-size: 2rem;
-//           font-weight: 800;
-//           text-decoration: none;
-//           margin: 15px 0;
-//           opacity: 0;
-//           transform: translateY(20px);
-//           transition: 0.5s;
-//         }
-//         .mobile-overlay.active a { opacity: 1; transform: translateY(0); }
-        
-//         @media (max-width: 480px) {
-//           .mobile-overlay a { font-size: 1.5rem; margin: 10px 0; }
-//         }
-//       `}</style>
-//     </nav>
-//   );
-// }
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
+import { BsChevronDown } from "react-icons/bs";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // Replaced separate booleans with one state for cleaner logic
+  const [activeDropdown, setActiveDropdown] = useState(null); 
+  
+  const navRef = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -514,132 +18,170 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    setActiveDropdown(null);
+    setMobileMenuOpen(false);
+  }, [location]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const navLinks = [
-    { name: "Home", href: "#hero" },
-    { name: "About", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Work", href: "#projects" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/", isRoute: true },
+    { name: "About", href: "/about", isRoute: true },
+    { 
+      id: "services", // Added ID for logic matching
+      name: "Services", 
+      href: "#services", 
+      isRoute: false,
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "Web Development", href: "/services/web-development", isRoute: true },
+        { name: "Branding", href: "/services/branding", isRoute: true },
+        { name: "AR/VR Development", href: "/services/ar-vr-development", isRoute: true },
+        { name: "Social Media Design", href: "/services/social-media-design", isRoute: true },
+      ]
+    },
+    { name: "Work", href: "#projects", isRoute: false },
+    { 
+      id: "resources",
+      name: "Resources", 
+      href: "#", 
+      isRoute: false,
+      hasDropdown: true,
+      dropdownItems: [
+        { name: "FAQ", href: "/faq", isRoute: true },
+        { name: "Blog", href: "/blog", isRoute: true },
+        { name: "Support", href: "/support", isRoute: true },
+      ]
+    },
+    { name: "Contact", href: "#contact", isRoute: false },
   ];
 
   const scrollToSection = (href) => {
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
     setMobileMenuOpen(false);
+    setActiveDropdown(null);
+  };
+
+  const handleDropdownToggle = (id) => {
+    setActiveDropdown(activeDropdown === id ? null : id);
   };
 
   return (
     <nav
-      className={`navbar-container ${scrolled ? "scrolled" : ""}`}
-      style={{
-        position: "fixed",
-        top: scrolled ? "15px" : "0px",
-        left: "0",
-        right: "0",
-        zIndex: 1000,
-        padding: "0 5%",
-        transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-      }}
+      ref={navRef}
+      className={`fixed top-0 left-0 right-0 z-50 px-[5%] transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        scrolled ? "top-[15px]" : "top-0"
+      }`}
     >
       <div
-        className="navbar-inner"
-        style={{
-          maxWidth: scrolled ? "1200px" : "100%",
-          margin: "0 auto",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: scrolled ? "10px 35px" : "25px 5%",
-          background: scrolled ? "rgba(11, 11, 11, 0.85)" : "transparent",
-          backdropFilter: scrolled ? "blur(20px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(20px)" : "none",
-          borderRadius: scrolled ? "100px" : "0px",
-          border: scrolled ? "1px solid rgba(255, 152, 0, 0.25)" : "1px solid transparent",
-          boxShadow: scrolled ? "0 20px 40px rgba(0,0,0,0.3)" : "none",
-          transition: "all 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
-        }}
+        className={`mx-auto flex items-center justify-between transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          scrolled ? "max-w-[1200px] rounded-full border border-orange-500/25 px-[35px] py-[10px]" : "max-w-full px-[5%] py-[25px]"
+        } ${
+          scrolled 
+            ? "bg-brand-dark/85 shadow-xl backdrop-blur-xl" 
+            : "bg-transparent"
+        }`}
       >
         {/* Logo Section */}
-        <div
-          className="logo-container"
-          style={{ 
-            display: "flex", 
-            alignItems: "center", 
-            gap: "5px", 
-            cursor: "pointer",
-          }}
-          onClick={() => scrollToSection("#hero")}
-        >
+        <Link to="/" className="flex items-center gap-[5px] cursor-pointer">
           <img
             src={logo}
             alt="Vedacurate"
-            className="logo-img"
+            className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              scrolled ? "w-[60px]" : "w-[80px]"
+            } animate-float`}
             style={{
-              width: scrolled ? "60px" : "80px", // Increased size
-              height: "auto",
               filter: scrolled 
                 ? "drop-shadow(0 0 12px rgba(255, 152, 0, 0.5))" 
-                : "drop-shadow(0 0 8px rgba(255, 152, 0, 0.2))",
-              transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
-              animation: "float 4s ease-in-out infinite" // Continuous float animation
+                : "drop-shadow(0 0 8px rgba(255, 152, 0, 0.2))"
             }}
           />
           <span
-            className="logo-text"
-            style={{
-              fontSize: scrolled ? "1.6rem" : "2.1rem", // Increased size
-              fontWeight: "900",
-              letterSpacing: "-1.5px",
-              background: "linear-gradient(to right, #ff9800, #ff5722, #ff9800)",
-              backgroundSize: "200% auto",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              transition: "all 0.5s ease",
-              animation: "shimmer 3s linear infinite"
-            }}
+            className={`font-black tracking-tight transition-all duration-500 bg-gradient-to-r from-brand-orange-400 via-brand-orange-600 to-brand-orange-400 bg-[length:200%_auto] bg-clip-text text-transparent animate-shimmer ${
+              scrolled ? "text-2xl" : "text-3xl"
+            }`}
           >
             Vedacurate
           </span>
-        </div>
+        </Link>
 
         {/* Desktop Links */}
-        <div className="desktop-links" style={{ display: "flex", gap: "40px", alignItems: "center" }}>
+        <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-              className="nav-item"
-              style={{
-                color: scrolled ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.7)",
-                textDecoration: "none",
-                fontSize: "1rem",
-                fontWeight: "600",
-                position: "relative",
-                padding: "5px 0",
-                transition: "all 0.3s ease"
-              }}
-            >
-              {link.name}
-              <span className="nav-underline" />
-            </a>
+            <div key={link.name} className="relative group">
+              {link.hasDropdown ? (
+                <button
+                  type="button"
+                  onClick={() => handleDropdownToggle(link.id)}
+                  className={`relative py-[5px] font-medium transition-all duration-300 hover:-translate-y-px flex items-center gap-1 ${
+                    scrolled ? "text-white/90" : "text-white/70"
+                  } hover:text-white nav-link cursor-pointer bg-transparent border-none`}
+                >
+                  {link.name}
+                  <BsChevronDown className={`text-xs transition-transform duration-300 ${activeDropdown === link.id ? "rotate-180" : ""}`} />
+                  <span className="nav-underline absolute bottom-0 left-0 h-0.5 w-0 bg-brand-orange-400 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
+                </button>
+              ) : link.isRoute ? (
+                <Link
+                  to={link.href}
+                  className={`relative py-[5px] font-medium transition-all duration-300 hover:-translate-y-px flex items-center gap-1 ${
+                    scrolled ? "text-white/90" : "text-white/70"
+                  } hover:text-white nav-link`}
+                >
+                  {link.name}
+                  <span className="nav-underline absolute bottom-0 left-0 h-0.5 w-0 bg-brand-orange-400 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(link.href)}
+                  className={`relative py-[5px] font-medium transition-all duration-300 hover:-translate-y-px flex items-center gap-1 ${
+                    scrolled ? "text-white/90" : "text-white/70"
+                  } hover:text-white nav-link cursor-pointer bg-transparent border-none`}
+                >
+                  {link.name}
+                  <span className="nav-underline absolute bottom-0 left-0 h-0.5 w-0 bg-brand-orange-400 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:w-full" />
+                </button>
+              )}
+
+              {/* Dropdown Menu */}
+              {link.hasDropdown && (
+                <div 
+                  className={`absolute top-full left-0 mt-2 min-w-[220px] rounded-xl border border-white/10 bg-brand-dark/95 backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-300 ${
+                    activeDropdown === link.id ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-2"
+                  }`}
+                >
+                  <div className="py-2">
+                    {link.dropdownItems.map((item, index) => (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className="block px-4 py-3 text-sm font-medium text-white/70 hover:text-white hover:bg-white/5 transition-all duration-200"
+                        style={{ transitionDelay: `${index * 0.05}s` }}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           ))}
-          
+
           <button
+            type="button"
             onClick={() => scrollToSection("#contact")}
-            className="talk-btn"
-            style={{
-              background: "linear-gradient(135deg, #ff9800, #ff5722)",
-              color: "white",
-              border: "none",
-              padding: scrolled ? "12px 28px" : "14px 32px",
-              borderRadius: "50px",
-              fontWeight: "700",
-              fontSize: "0.95rem",
-              cursor: "pointer",
-              marginLeft: "10px",
-              boxShadow: "0 10px 20px rgba(255, 87, 34, 0.3)",
-              transition: "all 0.3s ease"
-            }}
+            className="ml-[10px] cursor-pointer rounded-full bg-gradient-to-r from-brand-orange-400 to-brand-orange-600 px-[28px] py-[14px] text-[0.95rem] font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-orange-500/40"
+            style={{ padding: scrolled ? "12px 28px" : "14px 32px" }}
           >
             Let's Talk
           </button>
@@ -647,113 +189,91 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <button 
-          className="mobile-toggle" 
+          type="button"
+          className="lg:hidden bg-transparent border-none text-white cursor-pointer p-2"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          style={{ display: "none", background: "transparent", border: "none", color: "white", cursor: "pointer" }}
+          aria-label="Toggle menu"
         >
-          <div className={`burger ${mobileMenuOpen ? 'open' : ''}`}>
-            <span></span>
-            <span></span>
+          <div className="w-6 space-y-1.5">
+            <span className={`block h-0.5 w-full bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`block h-0.5 w-full bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`} />
+            <span className={`block h-0.5 w-full bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-[-45deg] translate-y-[-2px]' : ''}`} />
           </div>
         </button>
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className={`mobile-overlay ${mobileMenuOpen ? 'active' : ''}`}>
+      <div
+        className={`fixed inset-0 z-[-1] flex flex-col items-center justify-center gap-8 bg-[#080808]/98 backdrop-blur-2xl transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          mobileMenuOpen ? "h-screen opacity-100" : "h-0 opacity-0 overflow-hidden"
+        }`}
+      >
         {navLinks.map((link, i) => (
-          <a 
-            key={link.name} 
-            href={link.href} 
-            style={{ transitionDelay: `${i * 0.1}s` }}
-            onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-          >
-            {link.name}
-          </a>
+          <div key={link.name} className="w-full text-center">
+            {link.isRoute ? (
+              <Link
+                to={link.href}
+                className="text-3xl font-black text-white no-underline transition-all duration-500 hover:text-brand-orange-400"
+                style={{
+                  transitionDelay: `${i * 0.1}s`,
+                  opacity: mobileMenuOpen ? 1 : 0,
+                  transform: mobileMenuOpen ? "translateY(0)" : "translateY(20px)"
+                }}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ) : link.hasDropdown ? (
+              <div className="space-y-4">
+                <button
+                  type="button"
+                  onClick={() => handleDropdownToggle(link.id)}
+                  className="text-3xl font-black text-white transition-all duration-500 bg-transparent border-none"
+                  style={{
+                    transitionDelay: `${i * 0.1}s`,
+                    opacity: mobileMenuOpen ? 1 : 0,
+                    transform: mobileMenuOpen ? "translateY(0)" : "translateY(20px)"
+                  }}
+                >
+                  {link.name}
+                </button>
+                <div className={`flex flex-col gap-4 mt-4 transition-all duration-300 ${activeDropdown === link.id ? "opacity-100 h-auto" : "opacity-0 h-0 overflow-hidden"}`}>
+                  {link.dropdownItems.map((item, j) => (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="text-xl text-white/70 hover:text-brand-orange-400 transition-colors duration-300"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => scrollToSection(link.href)}
+                className="text-3xl font-black text-white no-underline transition-all duration-500 hover:text-brand-orange-400 bg-transparent border-none cursor-pointer"
+                style={{
+                  transitionDelay: `${i * 0.1}s`,
+                  opacity: mobileMenuOpen ? 1 : 0,
+                  transform: mobileMenuOpen ? "translateY(0)" : "translateY(20px)"
+                }}
+              >
+                {link.name}
+              </button>
+            )}
+          </div>
         ))}
+        <button
+          type="button"
+          onClick={() => scrollToSection("#contact")}
+          className="mt-8 cursor-pointer rounded-full bg-gradient-to-r from-brand-orange-400 to-brand-orange-600 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-orange-500/40"
+        >
+          Let's Talk
+        </button>
       </div>
-
-      <style>{`
-        /* Floating Animation for Logo */
-        @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-6px); }
-          100% { transform: translateY(0px); }
-        }
-
-        /* Subtle Gradient Shimmer for Text */
-        @keyframes shimmer {
-          to { background-position: 200% center; }
-        }
-
-        @media (max-width: 992px) {
-          .desktop-links { display: none !important; }
-          .mobile-toggle { display: block !important; }
-          .logo-text { font-size: 1.5rem !important; }
-          .logo-img { width: 40px !important; }
-        }
-
-        .nav-item:hover { color: #fff !important; transform: translateY(-1px); }
-        .nav-item:hover .nav-underline { width: 100%; }
-
-        .nav-underline {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 0;
-          height: 2px;
-          background: #ff9800;
-          transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .talk-btn:hover {
-          transform: translateY(-3px) scale(1.02);
-          box-shadow: 0 15px 35px rgba(255, 87, 34, 0.5);
-        }
-
-        .talk-btn:active { transform: translateY(-1px); }
-
-        /* Burger Icon */
-        .burger span {
-          display: block;
-          width: 28px;
-          height: 2px;
-          background: white;
-          margin: 8px 0;
-          transition: 0.4s;
-        }
-        .burger.open span:nth-child(1) { transform: rotate(-45deg) translate(-7px, 7px); }
-        .burger.open span:nth-child(2) { transform: rotate(45deg) translate(-7px, -7px); }
-
-        /* Mobile Overlay */
-        .mobile-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 0;
-          background: rgba(8, 8, 8, 0.98);
-          backdrop-filter: blur(25px);
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          transition: height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-          z-index: -1;
-        }
-        .mobile-overlay.active { height: 100vh; }
-        .mobile-overlay a {
-          color: white;
-          font-size: 2.5rem;
-          font-weight: 800;
-          text-decoration: none;
-          margin: 20px 0;
-          opacity: 0;
-          transform: translateY(30px);
-          transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .mobile-overlay.active a { opacity: 1; transform: translateY(0); }
-      `}</style>
     </nav>
   );
 }

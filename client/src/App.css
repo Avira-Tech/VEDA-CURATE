@@ -1,13 +1,3 @@
-#root {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
+/* App.css - Cleared for Tailwind CSS Migration */
+/* All styles are now handled by Tailwind CSS utility classes */
 
-/* Global resets if needed */
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}

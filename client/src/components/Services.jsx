@@ -1,331 +1,418 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useRef, Suspense, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import {
+  ScrollControls,
+  Scroll,
+  Float,
+  Environment,
+  useScroll,
+  Sparkles,
+  ContactShadows,
+  MeshWobbleMaterial, MeshDistortMaterial,
+} from '@react-three/drei';
+import * as THREE from 'three';
 
-export default function Services() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const sectionRef = useRef(null);
+// --- 1. 3D Model Components ---
 
-  // SEO-rich services with target keywords
-  const services = [
-    {
-      id: "branding",
-      title: "Branding",
-      icon: "✦",
-      description: "We craft powerful brand identities that resonate with your audience. Our freelance branding services include strategic logo design, comprehensive visual identity systems, and compelling brand voice development that sets you apart in the marketplace.",
-      features: ["Logo Design", "Visual Strategy", "Brand Voice", "Brand Guidelines"],
-      color: "#ff9800",
-      keywords: "branding services, logo design, brand identity, visual identity, brand strategy, freelance branding"
-    },
-    {
-      id: "social",
-      title: "Social Media",
-      icon: "◈",
-      description: "Scroll-stopping visuals and narrative-driven content designed to convert followers into fans. Our freelance social media design services encompass content strategy, motion graphics, and creative ad campaigns that drive engagement.",
-      features: ["Content Strategy", "Motion Graphics", "Ad Creative", "Visual Design"],
-      color: "#ff5722",
-      keywords: "social media design, social media marketing, content design, freelance social media, ad creative"
-    },
-    {
-      id: "dev",
-      title: "Web Development",
-      icon: "⬡",
-      description: "High-performance, scalable websites built with cutting-edge technology. Our freelance web development services include React/Next.js development, API design, e-commerce solutions, and responsive design for all devices.",
-      features: ["React / Next.js", "API Design", "E-commerce", "Responsive Design"],
-      color: "#ff9800",
-      keywords: "web development, website design, freelance web developer, react development, nextjs, ecommerce development"
-    },
-    {
-      id: "arvr",
-      title: "AR / VR",
-      icon: "⌬",
-      description: "Immersive spatial experiences that bring your boldest ideas to life in the digital realm. Our freelance AR/VR development services include 3D modeling, interactive spatial design, and metaverse experiences.",
-      features: ["3D Modeling", "Spatial Design", "Metaverse", "Interactive VR"],
-      color: "#ff5722",
-      keywords: "AR VR development, augmented reality, virtual reality, 3D design, spatial computing, metaverse, freelance AR VR"
-    },
+const BrandingModel = () => (
+  <Float speed={3} rotationIntensity={1.5} floatIntensity={1.5}>
+    <mesh castShadow>
+      <torusGeometry args={[1, 0.4, 16, 100]} />
+      <meshPhysicalMaterial color="#3b82f6" roughness={0.1} metalness={0.8} transmission={0.5} thickness={0.5} />
+    </mesh>
+    <Sparkles count={40} scale={4} size={3} color="#3b82f6" speed={0.5} />
+  </Float>
+);
+
+// const SocialMediaModel = () => (
+//   <Float speed={1.5} rotationIntensity={1}>
+//     <group>
+//       <mesh castShadow position={[0, 0, 0]}>
+//         <boxGeometry args={[0.6, 1.2, 0.1]} />
+//         <meshStandardMaterial color="#10b981" metalness={0.6} roughness={0.3} />
+//       </mesh>
+//       <mesh position={[0, 0, 0.06]}>
+//         <planeGeometry args={[0.5, 1]} />
+//         <meshBasicMaterial color="#34d399" />
+//       </mesh>
+//       <mesh position={[-0.15, 0.3, 0.07]}>
+//         <sphereGeometry args={[0.05, 16, 16]} />
+//         <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={0.5} />
+//       </mesh>
+//       <mesh position={[0.15, 0.3, 0.07]}>
+//         <sphereGeometry args={[0.05, 16, 16]} />
+//         <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={0.5} />
+//       </mesh>
+//       <mesh position={[0, -0.3, 0.07]}>
+//         <sphereGeometry args={[0.05, 16, 16]} />
+//         <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={0.5} />
+//       </mesh>
+//     </group>
+//   </Float>
+// );
+
+// const ARVRModel = () => (
+//   <Float speed={2} floatIntensity={1}>
+//     <group>
+//       <mesh castShadow position={[0, 0, 0]}>
+//         <boxGeometry args={[1.5, 0.8, 0.3]} />
+//         <meshStandardMaterial color="#ff6b00" metalness={0.7} roughness={0.2} />
+//       </mesh>
+//       <mesh position={[-0.4, 0, 0.16]}>
+//         <cylinderGeometry args={[0.2, 0.2, 0.1, 16]} />
+//         <meshBasicMaterial color="#ff6b00" transparent opacity={0.8} />
+//       </mesh>
+//       <mesh position={[0.4, 0, 0.16]}>
+//         <cylinderGeometry args={[0.2, 0.2, 0.1, 16]} />
+//         <meshBasicMaterial color="#ff6b00" transparent opacity={0.8} />
+//       </mesh>
+//       <mesh position={[0, -0.5, 0]}>
+//         <torusGeometry args={[0.8, 0.05, 16, 50]} />
+//         <meshStandardMaterial color="#ff6b00" />
+//       </mesh>
+//       <mesh scale={2}>
+//         <sphereGeometry args={[1, 32, 32]} />
+//         <meshBasicMaterial color="#ff6b00" transparent opacity={0.05} />
+//       </mesh>
+//     </group>
+//   </Float>
+// );
+
+// const WebDevModel = () => (
+//   <Float speed={1.5} floatIntensity={0.5}>
+//     <group>
+//       <mesh position={[0, -0.8, 0]} castShadow>
+//         <boxGeometry args={[0.8, 0.2, 0.6]} />
+//         <meshStandardMaterial color="#84cc16" roughness={0.8} />
+//       </mesh>
+//       <mesh position={[0, -0.4, 0]} castShadow>
+//         <cylinderGeometry args={[0.05, 0.05, 0.8, 16]} />
+//         <meshStandardMaterial color="#84cc16" />
+//       </mesh>
+//       <mesh position={[0, 0.2, 0]} castShadow>
+//         <boxGeometry args={[1.2, 0.8, 0.1]} />
+//         <meshStandardMaterial color="#84cc16" emissive="#84cc16" emissiveIntensity={0.1} />
+//       </mesh>
+//       <mesh position={[-0.4, 0.2, 0.06]}>
+//         <boxGeometry args={[0.8, 0.05, 0.01]} />
+//         <meshStandardMaterial color="#fbbf24" />
+//       </mesh>
+//       <mesh position={[-0.3, 0.1, 0.06]}>
+//         <boxGeometry args={[0.6, 0.05, 0.01]} />
+//         <meshStandardMaterial color="#fbbf24" />
+//       </mesh>
+//       <mesh position={[-0.5, 0, 0.06]}>
+//         <boxGeometry args={[0.7, 0.05, 0.01]} />
+//         <meshStandardMaterial color="#fbbf24" />
+//       </mesh>
+//       <Sparkles count={20} scale={2} size={2} color="#84cc16" speed={0.3} />
+//     </group>
+//   </Float>
+// );
+
+// const DataAnalyticsModel = () => (
+//   <Float speed={1.5} floatIntensity={0.3}>
+//     <group>
+//       <mesh position={[0, -1, 0]} castShadow>
+//         <boxGeometry args={[2, 0.2, 1]} />
+//         <meshStandardMaterial color="#ef4444" metalness={0.4} roughness={0.2} />
+//       </mesh>
+//       <mesh position={[-0.6, -0.3, 0]} castShadow>
+//         <boxGeometry args={[0.2, 1, 0.2]} />
+//         <meshStandardMaterial color="#fde047" />
+//       </mesh>
+//       <mesh position={[-0.2, -0.5, 0]} castShadow>
+//         <boxGeometry args={[0.2, 0.8, 0.2]} />
+//         <meshStandardMaterial color="#fde047" />
+//       </mesh>
+//       <mesh position={[0.2, -0.2, 0]} castShadow>
+//         <boxGeometry args={[0.2, 1.2, 0.2]} />
+//         <meshStandardMaterial color="#fde047" />
+//       </mesh>
+//       <mesh position={[0.6, -0.6, 0]} castShadow>
+//         <boxGeometry args={[0.2, 0.6, 0.2]} />
+//         <meshStandardMaterial color="#fde047" />
+//       </mesh>
+//       <mesh position={[0, 0.5, 0]} rotation={[0, 0, Math.PI / 4]}>
+//         <coneGeometry args={[0.4, 0.1, 8]} />
+//         <meshStandardMaterial color="#ef4444" />
+//       </mesh>
+//       <mesh position={[0, 0.5, 0]} rotation={[0, 0, -Math.PI / 4]}>
+//         <coneGeometry args={[0.4, 0.1, 8]} />
+//         <meshStandardMaterial color="#fde047" />
+//       </mesh>
+//     </group>
+//   </Float>
+// );
+
+// --- 2. Scene Orchestration ---
+const SocialMediaModel = () => (
+  <Float speed={2} rotationIntensity={1.5}>
+    <group>
+      {/* Central Phone/Feed Body */}
+      <mesh castShadow>
+        <boxGeometry args={[1, 1.8, 0.15]} />
+        <meshStandardMaterial color="#065f46" metalness={0.8} roughness={0.2} />
+      </mesh>
+      {/* Floating "Notification" Bubbles */}
+      <mesh position={[0.7, 0.5, 0.2]}>
+        <sphereGeometry args={[0.2, 32, 32]} />
+        <meshStandardMaterial color="#10b981" emissive="#10b981" emissiveIntensity={2} />
+      </mesh>
+      <mesh position={[-0.6, -0.3, 0.1]}>
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshStandardMaterial color="#34d399" />
+      </mesh>
+      {/* Scroll Bars */}
+      {[0.4, 0.1, -0.2].map((y, i) => (
+        <mesh key={i} position={[0, y, 0.08]}>
+          <planeGeometry args={[0.7, 0.15]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.4} />
+        </mesh>
+      ))}
+    </group>
+  </Float>
+);
+
+const ARVRModel = () => (
+  <Float speed={3} floatIntensity={2}>
+    <group>
+      {/* The Headset Base */}
+      <mesh castShadow>
+        <boxGeometry args={[1.6, 0.8, 0.8]} />
+        <meshStandardMaterial color="#222" metalness={0.9} roughness={0.1} />
+      </mesh>
+      {/* Lenses/Glass Front */}
+      <mesh position={[0, 0, 0.41]}>
+        <planeGeometry args={[1.4, 0.6]} />
+        <MeshWobbleMaterial color="#ff6b00" factor={0.2} speed={1} metalness={0.9} />
+      </mesh>
+      {/* Floating Coordinate Grid */}
+      <gridHelper args={[4, 10, "#ff6b00", "#444"]} rotation={[Math.PI / 2, 0, 0]} position={[0, 0, -1]} />
+      {/* Orbiting Tech Rings */}
+      <mesh rotation={[1.2, 0, 0]}>
+        <torusGeometry args={[2, 0.01, 16, 100]} />
+        <meshBasicMaterial color="#ff6b00" />
+      </mesh>
+    </group>
+  </Float>
+);
+
+const WebDevModel = () => (
+  <Float speed={2} floatIntensity={1}>
+    <group>
+      {/* Code "Window" */}
+      <mesh castShadow>
+        <boxGeometry args={[1.8, 1.2, 0.1]} />
+        <meshStandardMaterial color="#1a1a1a" metalness={0.5} roughness={0.5} />
+      </mesh>
+      {/* Floating Syntax Elements */}
+      <group position={[-0.5, 0, 0.1]}>
+        <mesh position={[0, 0.3, 0]}>
+          <boxGeometry args={[0.6, 0.08, 0.02]} />
+          <meshStandardMaterial color="#84cc16" />
+        </mesh>
+        <mesh position={[0.2, 0.1, 0]}>
+          <boxGeometry args={[0.8, 0.08, 0.02]} />
+          <meshStandardMaterial color="#fbbf24" />
+        </mesh>
+        <mesh position={[-0.1, -0.1, 0]}>
+          <boxGeometry args={[0.5, 0.08, 0.02]} />
+          <meshStandardMaterial color="#3b82f6" />
+        </mesh>
+      </group>
+      {/* Spinning "Logic" Gear */}
+      <mesh position={[0.6, -0.3, 0.2]} rotation={[0, 0, Date.now() * 0.001]}>
+        <torusGeometry args={[0.2, 0.05, 16, 8]} />
+        <meshStandardMaterial color="#84cc16" wireframe />
+      </mesh>
+    </group>
+  </Float>
+);
+
+const DataAnalyticsModel = () => (
+  <Float speed={2} floatIntensity={0.5}>
+    <group>
+      {/* Modern Bar Chart on a Platform */}
+      <mesh position={[0, -0.8, 0]} castShadow>
+        <cylinderGeometry args={[1.5, 1.5, 0.1, 32]} />
+        <meshStandardMaterial color="#333" />
+      </mesh>
+      {/* Dynamic Data Bars */}
+      {[
+        { h: 1.2, p: -0.6, c: "#ef4444" },
+        { h: 1.8, p: -0.2, c: "#fde047" },
+        { h: 1.4, p: 0.2, c: "#ef4444" },
+        { h: 2.2, p: 0.6, c: "#fde047" },
+      ].map((bar, i) => (
+        <mesh key={i} position={[bar.p, bar.h / 2 - 0.7, 0]}>
+          <boxGeometry args={[0.25, bar.h, 0.25]} />
+          <meshStandardMaterial color={bar.c} emissive={bar.c} emissiveIntensity={0.2} />
+        </mesh>
+      ))}
+      {/* Floating Trend Line */}
+      <mesh position={[0, 0.5, 0.2]} rotation={[0, 0, 0.3]}>
+        <boxGeometry args={[2, 0.02, 0.02]} />
+        <meshStandardMaterial color="#ffffff" />
+      </mesh>
+    </group>
+  </Float>
+);
+const Scene = ({ currentSection, setActiveSection }) => {
+  const scroll = useScroll();
+  const groupRef = useRef();
+  const targetY = useRef(0);
+
+  const colors = ["#080808", "#051510", "#150d05", "#0d1505", "#150505", "#150510"];
+
+  useFrame((state) => {
+    if (!groupRef.current) return;
+
+    const offset = scroll.offset;
+    const effectiveOffset = currentSection !== null ? currentSection / 5 : offset;
+    
+    targetY.current = -effectiveOffset * 40;
+
+    groupRef.current.position.y = THREE.MathUtils.lerp(
+      groupRef.current.position.y,
+      targetY.current,
+      0.1
+    );
+
+    const colorIndex = Math.min(Math.floor(effectiveOffset * colors.length), colors.length - 1);
+    state.scene.background.lerp(new THREE.Color(colors[colorIndex]), 0.05);
+
+    const sectionIndex = Math.min(Math.floor(effectiveOffset * 6), 5);
+    setActiveSection(sectionIndex);
+
+    state.camera.lookAt(0, 0, 0);
+  });
+
+  const projects = [
+    { model: <BrandingModel />, pos: [2, 0, 0] },
+    { model: <SocialMediaModel />, pos: [-2, 8, 0] },
+    { model: <ARVRModel />, pos: [2, 16, 0] },
+    { model: <WebDevModel />, pos: [-2, 24, 0] },
+    { model: <DataAnalyticsModel />, pos: [2, 32, 0] },
   ];
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      observer.disconnect();
-    };
-  }, []);
+  return (
+    <group ref={groupRef}>
+      <ContactShadows opacity={0.5} scale={20} blur={2.5} far={4.5} />
+      {projects.map((p, i) => (
+        <group key={i} position={p.pos}>
+          {p.model}
+          <pointLight position={[2, 2, 2]} intensity={5} color="white" />
+          <pointLight position={[-2, -2, -2]} intensity={2} color="white" />
+        </group>
+      ))}
+    </group>
+  );
+};
+
+// --- 3. Main Viewer Component ---
+
+const ServiceModel = () => {
+  const [currentSection, setCurrentSection] = useState(null);
+  const [activeSection, setActiveSection] = useState(0);
+
+  const projectInfo = [
+    { title: "Creative Branding", category: "BRANDING", color: "from-blue-400 to-indigo-600", desc: "Crafting unique brand identities that resonate and inspire, from logos to comprehensive visual strategies." },
+    { title: "Social Media", category: "SOCIAL", color: "from-emerald-400 to-teal-600", desc: "Strategic social media management and content creation to boost engagement and grow your online presence." },
+    { title: "AR/VR Experiences", category: "ARVR", color: "from-orange-400 to-red-600", desc: "Immersive augmented and virtual reality solutions for interactive storytelling and user experiences." },
+    { title: "Web Development", category: "WEBDEV", color: "from-lime-400 to-green-600", desc: "Building responsive, scalable websites and web applications with modern technologies and best practices." },
+    { title: "Data Analytics", category: "DATA", color: "from-red-400 to-pink-600", desc: "Transforming raw data into actionable insights with advanced analytics, visualization, and reporting tools." },
+  ];
+
+  const scrollToCaseStudy = (index) => {
+    setCurrentSection(index);
+    setTimeout(() => setCurrentSection(null), 1500);
+  };
 
   return (
-    <section
-      id="services"
-      ref={sectionRef}
-      role="region"
-      aria-label="Our Services"
-      style={{
-        minHeight: "100vh",
-        padding: "120px 8%",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Dynamic Cursor Spotlight */}
-      <div style={{
-        position: "fixed",
-        top: mousePos.y,
-        left: mousePos.x,
-        width: "600px",
-        height: "600px",
-        background: "radial-gradient(circle, rgba(255, 87, 34, 0.07) 0%, transparent 70%)",
-        transform: "translate(-50%, -50%)",
-        pointerEvents: "none",
-        zIndex: 0,
-        transition: "transform 0.1s ease-out"
-      }} />
-
-      {/* Header Section */}
-      <div style={{
-        textAlign: "center",
-        marginBottom: "100px",
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "translateY(0)" : "translateY(40px)",
-        transition: "all 1.2s cubic-bezier(0.16, 1, 0.3, 1)",
-        position: "relative",
-        zIndex: 1
-      }}>
-        <div className="modern-badge">Expertise</div>
-        <h2 className="services-title">
-          Fueling Your <br />
-          <span className="shimmer-text">Digital Evolution</span>
-        </h2>
-        <p className="services-subtitle">
-          Comprehensive freelance design and development services tailored to elevate your brand and drive business growth.
-        </p>
-      </div>
-
-      {/* Grid */}
-      <div className="services-grid" role="list">
-        {services.map((service, index) => (
+    <div className="w-full h-screen relative">
+      {/* Fixed Sidebar Progress */}
+      <div className="fixed left-6 xl:left-12 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-6 pointer-events-auto">
+        {projectInfo.map((_, i) => (
           <div
-            key={service.id}
-            className="card-container"
-            role="listitem"
-            style={{
-              opacity: isVisible ? 1 : 0,
-              transform: isVisible ? "translateY(0)" : "translateY(60px)",
-              transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.15}s`,
-            }}
+            key={i}
+            className="group flex items-center gap-4 cursor-pointer"
+            onClick={() => scrollToCaseStudy(i)}
           >
-            <article className="service-card">
-              {/* Border Beam Effect */}
-              <div className="border-beam" style={{ background: service.color }} />
-              
-              <div className="card-content">
-                <div className="icon-wrapper" style={{ color: service.color }}>
-                  <div className="icon-inner" aria-hidden="true">{service.icon}</div>
-                  <div className="icon-pulse" style={{ background: service.color }} />
-                </div>
-
-                <h3 className="s-title">{service.title}</h3>
-                <p className="s-desc">{service.description}</p>
-
-                <div className="s-features" role="list">
-                  {service.features.map((f, i) => (
-                    <span key={i} className="s-tag" role="listitem">{f}</span>
-                  ))}
-                </div>
-
-                <div className="s-footer">
-                  <div className="s-link">Explore Case Study</div>
-                  <div className="s-arrow" aria-hidden="true">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </article>
+            <div className={`h-[2px] transition-all duration-500 ${i === activeSection ? 'w-10 bg-brand-orange-400' : 'w-6 bg-white/10 group-hover:w-10 group-hover:bg-brand-orange-400/50'}`} />
+            <span className={`text-[10px] font-mono tracking-tighter transition-all duration-500 ${i === activeSection ? 'text-white' : 'text-white/30 group-hover:text-white/70'}`}>0{i+1}</span>
           </div>
         ))}
       </div>
 
-      {/* Service Schema Markup */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{
-        __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          "name": "Services by Vedacurate",
-          "description": "Professional freelance services including branding, social media design, web development, and AR/VR experiences.",
-          "url": "https://vedacurate.com#services",
-          "numberOfItems": services.length,
-          "itemListElement": services.map((service, index) => ({
-            "@type": "ListItem",
-            "position": index + 1,
-            "name": service.title,
-            "description": service.description,
-            "keywords": service.keywords,
-            "url": `https://vedacurate.com#${service.id}`
-          }))
-        })
-      }} />
+      {/* 3D Canvas */}
+      <div className="absolute inset-0 z-0">
+        <Canvas
+          shadows
+          dpr={[1, 2]}
+          gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+          camera={{ position: [0, 0, 12], fov: 35 }}
+          onCreated={(state) => { state.scene.background = new THREE.Color('#080808'); }}
+        >
+          <Environment preset="city" />
+          <ambientLight intensity={0.4} />
+          
+          <Suspense fallback={null}>
+            <ScrollControls pages={projectInfo.length} damping={0.2}>
+              <Scene currentSection={currentSection} setActiveSection={setActiveSection} />
+              
+              <Scroll html style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}>
+                <div className="w-screen">
+                  {projectInfo.map((info, i) => (
+                    <section
+                      key={i}
+                      className={`h-screen flex items-center px-8 md:px-16 xl:px-40 ${i % 2 === 0 ? 'justify-start' : 'justify-end'}`}
+                      style={{ pointerEvents: 'none' }}
+                    >
+                      <div className="max-w-2xl relative pointer-events-auto">
+                        <h2 className="absolute -top-20 -left-10 md:-left-20 text-[10rem] md:text-[15rem] font-black text-white/[0.02] select-none pointer-events-none uppercase italic leading-none">
+                          {info.category}
+                        </h2>
+                        
+                        <div className="relative z-10 space-y-6 md:space-y-8">
+                          <div className="flex items-center gap-4 md:gap-6">
+                            <div className="w-12 md:w-16 h-[1px] bg-brand-orange-400" />
+                            <span className="text-[10px] md:text-[10px] font-mono tracking-[0.6em] text-white/50 uppercase">
+                              Case Study 0{i+1}
+                            </span>
+                          </div>
 
-      <style>{`
-        .services-title {
-          font-size: clamp(2.5rem, 6vw, 5rem);
-          font-weight: 900;
-          color: #fff;
-          line-height: 1;
-          letter-spacing: -2px;
-        }
+                          <h1 className={`text-5xl md:text-7xl xl:text-[9rem] font-black leading-[0.8] tracking-tighter text-transparent bg-clip-text bg-gradient-to-br ${info.color} uppercase italic`}>
+                            {info.title.split(' ')[0]} <br />
+                            <span className="text-white not-italic">{info.title.split(' ').slice(1).join(' ')}</span>
+                          </h1>
 
-        .shimmer-text {
-          background: linear-gradient(90deg, #fff, #ff9800, #ff5722, #fff);
-          background-size: 200% auto;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          animation: shimmer 4s linear infinite;
-        }
+                          <p className="text-white/40 text-base md:text-xl font-light leading-relaxed max-w-md border-l-2 border-brand-orange-400/20 pl-6 md:pl-8">
+                            {info.desc}
+                          </p>
 
-        @keyframes shimmer {
-          to { background-position: 200% center; }
-        }
-
-        .services-subtitle {
-          font-size: clamp(1rem, 2vw, 1.25rem);
-          color: rgba(255,255,255,0.5);
-          max-width: 600px;
-          margin: 20px auto 0;
-          line-height: 1.6;
-        }
-
-        .modern-badge {
-          display: inline-block;
-          padding: 6px 16px;
-          background: rgba(255, 152, 0, 0.1);
-          border: 1px solid rgba(255, 152, 0, 0.2);
-          border-radius: 6px;
-          color: #ff9800;
-          font-size: 0.75rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 3px;
-          margin-bottom: 20px;
-        }
-
-        .services-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 30px;
-          position: relative;
-          z-index: 2;
-        }
-
-        .service-card {
-          position: relative;
-          background: #0d0d0d;
-          border: 1px solid rgba(255,255,255,0.05);
-          border-radius: 24px;
-          padding: 40px;
-          height: 100%;
-          overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Border Glow Animation */
-        .border-beam {
-          position: absolute;
-          top: 0; left: 0; width: 100%; height: 2px;
-          opacity: 0;
-          transition: 0.4s ease;
-        }
-
-        .service-card:hover {
-          transform: translateY(-10px);
-          border-color: rgba(255, 152, 0, 0.3);
-          background: #111;
-        }
-
-        .service-card:hover .border-beam { opacity: 1; }
-
-        .icon-wrapper {
-          position: relative;
-          width: 60px;
-          height: 60px;
-          margin-bottom: 30px;
-        }
-
-        .icon-inner {
-          position: relative;
-          z-index: 2;
-          font-size: 2rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-          transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .service-card:hover .icon-inner { transform: rotateY(180deg) scale(1.2); }
-
-        .icon-pulse {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          border-radius: 50%;
-          opacity: 0.15;
-          filter: blur(10px);
-        }
-
-        .s-title { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 15px; }
-        .s-desc { font-size: 1rem; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 30px; }
-
-        .s-features { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px; }
-        .s-tag {
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: rgba(255,255,255,0.6);
-          background: rgba(255,255,255,0.03);
-          padding: 6px 12px;
-          border-radius: 8px;
-          border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .s-footer {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding-top: 25px;
-          border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .s-link { font-size: 0.9rem; font-weight: 700; color: #fff; opacity: 0.4; transition: 0.3s; }
-        .service-card:hover .s-link { opacity: 1; }
-
-        .s-arrow {
-          width: 40px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          transition: 0.4s;
-        }
-
-        .service-card:hover .s-arrow { transform: translate(3px, -3px) scale(1.1); color: #ff9800; }
-
-        @media (max-width: 768px) {
-          #services { padding: 80px 5%; }
-          .services-grid { grid-template-columns: 1fr; }
-        }
-      `}</style>
-    </section>
+                          <div className="flex gap-4 md:gap-8 pt-4 md:pt-6">
+                            <button className="group relative px-6 md:px-10 py-3 md:py-5 bg-white text-black font-black text-[10px] md:text-xs tracking-widest rounded-full overflow-hidden transition-all pointer-events-auto">
+                              <span className="relative z-10">VIEW PROJECT</span>
+                              <div className="absolute inset-0 bg-brand-orange-400 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                            </button>
+                            <button className="px-6 md:px-10 py-3 md:py-5 border border-white/10 text-white font-black text-[10px] md:text-xs tracking-widest rounded-full hover:bg-white/5 transition-all pointer-events-auto">
+                              LIVE
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  ))}
+                </div>
+              </Scroll>
+            </ScrollControls>
+          </Suspense>
+        </Canvas>
+      </div>
+    </div>
   );
-}
+};
+
+export default ServiceModel;
 

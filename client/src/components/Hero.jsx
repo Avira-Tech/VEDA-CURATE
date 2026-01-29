@@ -1,14 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 /* =========================
    WORD BLOCK COMPONENT
-   Updated with:
-   - Proper Spacing
-   - Interactive Hover Scale & Glow
+   Refined for high-end typography
 ========================= */
 function WordBlock({ words, delay = 0, gradient = false }) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), delay);
@@ -18,45 +15,14 @@ function WordBlock({ words, delay = 0, gradient = false }) {
   const wordArray = Array.isArray(words) ? words : words.split(" ");
 
   return (
-    <span 
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{ 
-        display: "inline-flex", 
-        flexWrap: "wrap", 
-        gap: "0.25em",
-        marginRight: "0.3em", // Added space between blocks
-        cursor: gradient ? "pointer" : "default"
-      }}
-    >
+    <span className="inline-flex flex-wrap justify-center gap-x-3 mx-1">
       {wordArray.map((word, wordIndex) => (
         <span
           key={wordIndex}
-          style={{
-            display: "inline-block",
-            opacity: isLoaded ? 1 : 0,
-            transform: isLoaded
-              ? isHovered && gradient 
-                ? "scale(1.1) translateY(-5px)" // Hover motion
-                : "scale(1) translateY(0)"
-              : "scale(0.9) translateY(30px)",
-            filter: isLoaded 
-              ? (isHovered && gradient ? "drop-shadow(0 0 15px rgba(255, 87, 34, 0.6))" : "blur(0)") 
-              : "blur(12px)",
-            transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1)`,
-            transitionDelay: isHovered ? "0s" : `${wordIndex * 0.1}s`,
-            background: gradient
-              ? "linear-gradient(90deg, #ff9800, #ff5722, #ffcc33, #ff9800)"
-              : "transparent",
-            backgroundSize: "300% auto",
-            WebkitBackgroundClip: gradient ? "text" : "unset",
-            WebkitTextFillColor: gradient ? "transparent" : "inherit",
-            fontWeight: "900",
-            letterSpacing: "-0.03em",
-            animation: gradient
-              ? `textShimmer ${isHovered ? '1.5s' : '4s'} linear infinite, floatText 6s ease-in-out infinite`
-              : "none",
-          }}
+          className={`inline-block transition-all duration-1000 cubic-bezier(0.22, 1, 0.36, 1) ${
+            isLoaded ? "opacity-100 translate-y-0 blur-0" : "opacity-0 translate-y-12 blur-xl"
+          } ${gradient ? "text-transparent bg-clip-text bg-gradient-to-r from-brand-orange-400 via-orange-500 to-brand-orange-600 bg-[length:200%_auto] animate-text-shimmer" : "text-white"}`}
+          style={{ transitionDelay: `${wordIndex * 0.05}s` }}
         >
           {word}
         </span>
@@ -66,12 +32,7 @@ function WordBlock({ words, delay = 0, gradient = false }) {
 }
 
 export default function Hero() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const heroRef = useRef(null);
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
+  const [isLoaded] = useState(true);
 
   const scrollToSection = (href) => {
     const element = document.querySelector(href);
@@ -83,209 +44,98 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      ref={heroRef}
-      role="region"
-      aria-label="Hero Section"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        position: "relative",
-        overflow: "hidden",
-        padding: "100px 8%",
-        color: "#fff",
-      }}
+      className="min-h-screen flex items-center justify-center relative overflow-hidden px-[6%] pt-20 "
     >
-      <div style={{ position: "relative", zIndex: 1, maxWidth: "1200px" }}>
+      {/* Dynamic Background Elements - Centered Blobs */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] rounded-full bg-brand-orange-500/10 blur-[120px] animate-pulse" />
+        {/* <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" /> */}
+      </div>
+
+      <div className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center text-center">
         
-        {/* Attraction Badge */}
+        {/* Status Badge */}
         <div
-          style={{
-            display: "inline-flex",
-            padding: "8px 16px",
-            background: "rgba(255, 152, 0, 0.1)",
-            border: "1px solid rgba(255, 152, 0, 0.2)",
-            borderRadius: "100px",
-            fontSize: "0.7rem",
-            fontWeight: "700",
-            letterSpacing: "3px",
-            textTransform: "uppercase",
-            color: "#ff9800",
-            marginBottom: "30px",
-            animation: "pulseGlow 2s infinite",
-          }}
+          className={`inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-10 transition-all duration-1000 ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+          }`}
         >
-          Design • Tech • Growth
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-orange-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-orange-500"></span>
+          </span>
+          <span className="text-[10px] font-bold tracking-[3px] uppercase text-white/70">
+            Available for New Projects
+          </span>
         </div>
 
-        {/* Hero Title - SEO Optimized with Keywords */}
-        <h1
-          style={{
-            fontSize: "clamp(3.5rem, 8vw, 7rem)",
-            lineHeight: "1.1",
-            marginBottom: "35px",
-            color: "#fff",
-            fontWeight: "900",
-          }}
-        >
-          <div style={{ marginBottom: "10px" }}>
+        {/* Hero Title - Centered Layout */}
+        <h1 className="text-[clamp(2.5rem,8vw,7rem)] leading-[1.1] font-bold mb-10 tracking-tight">
+          <div className="block pb-2">
             <WordBlock words="Designing" delay={200} />
             <WordBlock words="Magic." delay={400} gradient />
           </div>
-          <div>
+          <div className="block">
             <WordBlock words="Engineering" delay={600} />
             <WordBlock words="Growth." delay={800} gradient />
           </div>
         </h1>
 
-        {/* SEO-optimized description with keywords */}
+        {/* Description - Centered and Max-Width for readability */}
         <p
-          style={{
-            fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
-            color: "rgba(255,255,255,0.5)",
-            marginBottom: "50px",
-            maxWidth: "700px",
-            lineHeight: "1.7",
-            opacity: isLoaded ? 1 : 0,
-            transform: isLoaded ? "translateY(0)" : "translateY(20px)",
-            transition: "all 0.8s ease 1s",
-          }}
+          className={`text-lg md:text-xl text-white/40 mb-14 max-w-2xl leading-relaxed transition-all duration-1000 delay-1000 ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         >
-          Vedacurate is a creative powerhouse blending{" "}
-          <span style={{ color: "#fff", fontWeight: "600" }}>strategic design</span> with{" "}
-          <span style={{ color: "#fff", fontWeight: "600" }}>cutting-edge code</span> to build
-          digital experiences that convert. As a leading freelance agency, we specialize in
-          website development, branding, AR/VR experiences, and social media design.
+          We architect digital legacies by blending <span className="text-white font-medium">strategic design</span> with 
+          <span className="text-white font-medium"> technical excellence</span>. From bespoke branding to 
+          immersive AR/VR, we make your brand unmissable.
         </p>
 
-        {/* Action Group */}
+        {/* CTA Group - Center Justified */}
         <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            flexWrap: "wrap",
-            opacity: isLoaded ? 1 : 0,
-            transition: "all 0.8s ease 1.2s",
-          }}
+          className={`flex flex-col sm:flex-row items-center justify-center gap-6 transition-all duration-1000 delay-[1.2s] w-full ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         >
           <button
             onClick={() => scrollToSection("#work")}
-            className="btn-primary"
-            aria-label="View our portfolio and start a project"
-            style={{
-              background: "linear-gradient(135deg, #ff9800, #ff5722)",
-              color: "#fff",
-              border: "none",
-              padding: "22px 48px",
-              borderRadius: "15px",
-              fontWeight: "800",
-              fontSize: "1.1rem",
-              cursor: "pointer",
-              boxShadow: "0 15px 35px rgba(255, 87, 34, 0.25)",
-              transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-            }}
-            onMouseEnter={(e) => e.target.style.transform = "translateY(-5px) scale(1.02)"}
-            onMouseLeave={(e) => e.target.style.transform = "translateY(0) scale(1)"}
+            className="group relative w-full sm:w-auto px-12 py-5 rounded-2xl bg-brand-orange-500 overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,152,0,0.3)] active:scale-95"
           >
-            Start a Project
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            <span className="relative z-10 text-white font-bold text-lg">Start a Project</span>
           </button>
 
           <button
             onClick={() => scrollToSection("#about")}
-            aria-label="Learn more about our company"
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.1)",
-              backdropFilter: "blur(10px)",
-              padding: "22px 48px",
-              borderRadius: "15px",
-              fontWeight: "600",
-              fontSize: "1.1rem",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => e.target.style.background = "rgba(255,255,255,0.1)"}
-            onMouseLeave={(e) => e.target.style.background = "rgba(255,255,255,0.05)"}
+            className="w-full sm:w-auto px-12 py-5 rounded-2xl bg-white/5 text-white font-bold text-lg border border-white/10 backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:border-white/20 active:scale-95"
           >
             Our Story
           </button>
         </div>
 
-        {/* Stats Row - Social Proof for SEO */}
+        {/* Centered Stats Row */}
         <div
-          className="hero-stats-grid"
-          role="list"
-          aria-label="Company statistics"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-            gap: "50px",
-            marginTop: "100px",
-            paddingTop: "60px",
-            borderTop: "1px solid rgba(255,255,255,0.08)",
-            opacity: isLoaded ? 1 : 0,
-            transition: "all 1s ease 1.4s",
-          }}
+          className={`flex flex-wrap justify-center gap-12 md:gap-24 mt-24 pt-12 border-t border-white/5 w-full transition-all duration-1000 delay-[1.4s] ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
         >
           {[
-            { num: "150+", label: "Successful Launches", description: "Websites and applications delivered" },
-            { num: "10+", label: "Global Partners", description: "International client collaborations" },
-            { num: "4+", label: "Years of Craft", description: "Expertise in design and development" },
+            { num: "150+", label: "Launches" },
+            { num: "10+", label: "Partners" },
+            { num: "4+", label: "Years" },
           ].map((stat, i) => (
-            <div key={i} className="stat-item" role="listitem">
-              <h4
-                style={{
-                  fontSize: "2.8rem",
-                  fontWeight: "900",
-                  marginBottom: "8px",
-                  background: "linear-gradient(to bottom, #fff, rgba(255,255,255,0.3))",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
-              >
+            <div key={i} className="group text-center">
+              <div className="text-4xl md:text-5xl font-bold text-white mb-1 tracking-tighter group-hover:text-brand-orange-400 transition-colors">
                 {stat.num}
-              </h4>
-              <p
-                style={{
-                  color: "rgba(255,255,255,0.4)",
-                  fontWeight: "600",
-                  fontSize: "1rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "1px"
-                }}
-                aria-label={stat.description}
-              >
+              </div>
+              <p className="text-[10px] text-white/30 font-bold uppercase tracking-[3px]">
                 {stat.label}
               </p>
             </div>
           ))}
         </div>
       </div>
-
-      <style>{`
-        @keyframes textShimmer {
-          to { background-position: 300% center; }
-        }
-
-        @keyframes floatText {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-
-        @keyframes pulseGlow {
-          0% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4); }
-          70% { box-shadow: 0 0 0 15px rgba(255, 152, 0, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
-        }
-
-        @media (max-width: 768px) {
-          #hero { padding: 120px 5% 60px; text-align: center; }
-          #hero div { align-items: center; justify-content: center; margin-inline: auto; }
-          .hero-stats-grid { grid-template-columns: 1fr !important; gap: 40px; }
-        }
-      `}</style>
     </section>
   );
 }
-
