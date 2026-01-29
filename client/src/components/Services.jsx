@@ -258,60 +258,101 @@ const DataAnalyticsModel = () => (
     </group>
   </Float>
 );
+// const Scene = ({ currentSection, setActiveSection }) => {
+//   const scroll = useScroll();
+//   const groupRef = useRef();
+//   const targetY = useRef(0);
+
+//   const colors = ["#080808", "#051510", "#150d05", "#0d1505", "#150505"];
+
+//   useFrame((state) => {
+//     if (!groupRef.current) return;
+
+//     const offset = scroll.offset;
+//     const effectiveOffset = currentSection !== null ? currentSection / 5 : offset;
+    
+//     targetY.current = -effectiveOffset * 40;
+
+//     groupRef.current.position.y = THREE.MathUtils.lerp(
+//       groupRef.current.position.y,
+//       targetY.current,
+//       0.1
+//     );
+
+//     const colorIndex = Math.min(Math.floor(effectiveOffset * colors.length), colors.length - 1);
+//     state.scene.background.lerp(new THREE.Color(colors[colorIndex]), 0.05);
+
+//     const sectionIndex = Math.min(Math.floor(effectiveOffset * 6), 5);
+//     setActiveSection(sectionIndex);
+
+//     state.camera.lookAt(0, 0, 0);
+//   });
+
+//   const projects = [
+//     { model: <BrandingModel />, pos: [2, 0, 0] },
+//     { model: <SocialMediaModel />, pos: [-2, 8, 0] },
+//     { model: <ARVRModel />, pos: [2, 16, 0] },
+//     { model: <WebDevModel />, pos: [-2, 24, 0] },
+//     { model: <DataAnalyticsModel />, pos: [2, 32, 0] },
+//   ];
+
+//   return (
+//     <group ref={groupRef}>
+//       <ContactShadows opacity={0.5} scale={20} blur={2.5} far={4.5} />
+//       {projects.map((p, i) => (
+//         <group key={i} position={p.pos}>
+//           {p.model}
+//           <pointLight position={[2, 2, 2]} intensity={5} color="white" />
+//           <pointLight position={[-2, -2, -2]} intensity={2} color="white" />
+//         </group>
+//       ))}
+//     </group>
+//   );
+// };
+
+// --- 3. Main Viewer Component ---
 const Scene = ({ currentSection, setActiveSection }) => {
   const scroll = useScroll();
   const groupRef = useRef();
-  const targetY = useRef(0);
-
-  const colors = ["#080808", "#051510", "#150d05", "#0d1505", "#150505", "#150510"];
+  
+  // Adjusted spacing to match section heights (10 units per section is standard)
+  const SECTION_DISTANCE = 15; 
 
   useFrame((state) => {
     if (!groupRef.current) return;
 
+    // Use the scroll offset (0 to 1) to determine vertical position
     const offset = scroll.offset;
-    const effectiveOffset = currentSection !== null ? currentSection / 5 : offset;
-    
-    targetY.current = -effectiveOffset * 40;
+    groupRef.current.position.y = offset * (SECTION_DISTANCE * 4);
 
-    groupRef.current.position.y = THREE.MathUtils.lerp(
-      groupRef.current.position.y,
-      targetY.current,
-      0.1
-    );
-
-    const colorIndex = Math.min(Math.floor(effectiveOffset * colors.length), colors.length - 1);
+    // Dynamic background color transition
+    const colors = ["#080808", "#051510", "#150d05", "#0d1505", "#150505"];
+    const colorIndex = Math.min(Math.floor(offset * colors.length), colors.length - 1);
     state.scene.background.lerp(new THREE.Color(colors[colorIndex]), 0.05);
 
-    const sectionIndex = Math.min(Math.floor(effectiveOffset * 6), 5);
+    // Update active section state for the sidebar
+    const sectionIndex = Math.min(Math.floor(offset * 5), 4);
     setActiveSection(sectionIndex);
-
-    state.camera.lookAt(0, 0, 0);
   });
 
   const projects = [
-    { model: <BrandingModel />, pos: [2, 0, 0] },
-    { model: <SocialMediaModel />, pos: [-2, 8, 0] },
-    { model: <ARVRModel />, pos: [2, 16, 0] },
-    { model: <WebDevModel />, pos: [-2, 24, 0] },
-    { model: <DataAnalyticsModel />, pos: [2, 32, 0] },
+    { model: <BrandingModel />, pos: [3, 0, 0] },
+    { model: <SocialMediaModel />, pos: [-3, -SECTION_DISTANCE, 0] },
+    { model: <ARVRModel />, pos: [3, -SECTION_DISTANCE * 2, 0] },
+    { model: <WebDevModel />, pos: [-3, -SECTION_DISTANCE * 3, 0] },
+    { model: <DataAnalyticsModel />, pos: [3, -SECTION_DISTANCE * 4, 0] },
   ];
 
   return (
     <group ref={groupRef}>
-      <ContactShadows opacity={0.5} scale={20} blur={2.5} far={4.5} />
       {projects.map((p, i) => (
         <group key={i} position={p.pos}>
           {p.model}
-          <pointLight position={[2, 2, 2]} intensity={5} color="white" />
-          <pointLight position={[-2, -2, -2]} intensity={2} color="white" />
         </group>
       ))}
     </group>
   );
 };
-
-// --- 3. Main Viewer Component ---
-
 const ServiceModel = () => {
   const [currentSection, setCurrentSection] = useState(null);
   const [activeSection, setActiveSection] = useState(0);
