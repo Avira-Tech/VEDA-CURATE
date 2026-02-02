@@ -216,7 +216,7 @@ const ContactDetails = () => {
                 Interactive map would be embedded here
               </p>
               <p className="text-white/40 text-sm mt-2">
-                123 Innovation Street, Tech District, NY 10001
+                Pune, Maharashtra, India 
               </p>
             </div>
           </motion.div>
