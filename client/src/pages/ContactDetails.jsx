@@ -1,29 +1,32 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from 'react-icons/fa';
+import React from "react";
+import { motion } from "framer-motion";
+import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaClock } from "react-icons/fa";
 
 const ContactDetails = () => {
   const contactInfo = [
     {
       icon: <FaMapMarkerAlt className="w-6 h-6" />,
       title: "Address",
-      details: ["Pune, Maharashtra", "India"]
+      details: ["Pune, Maharashtra", "India"],
     },
     {
       icon: <FaPhone className="w-6 h-6" />,
       title: "Phone",
-      details: ["+91 85399 06485"]
+      details: ["+91 85399 06485"],
     },
     {
       icon: <FaEnvelope className="w-6 h-6" />,
       title: "Email",
-      details: ["vedacurate@gmail.com"]
+      details: ["vedacurate@gmail.com"],
     },
     {
       icon: <FaClock className="w-6 h-6" />,
       title: "Business Hours",
-      details: ["Mon - Fri: 9:00 AM - 6:00 PM IST", "Sat - Sun: By appointment"]
-    }
+      details: [
+        "Mon - Fri: 9:00 AM - 6:00 PM IST",
+        "Sat - Sun: By appointment",
+      ],
+    },
   ];
 
   return (
@@ -37,10 +40,14 @@ const ContactDetails = () => {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8">
-              Contact <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange-400 to-orange-200">Details</span>
+              Contact{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange-400 to-orange-200">
+                Details
+              </span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              Get in touch with us. We're here to help bring your digital vision to life.
+              Get in touch with us. We're here to help bring your digital vision
+              to life.
             </p>
           </motion.div>
         </div>
@@ -59,13 +66,13 @@ const ContactDetails = () => {
                 transition={{ delay: index * 0.1 }}
                 className="p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300"
               >
-                <div className="text-brand-orange-400 mb-6">
-                  {info.icon}
-                </div>
+                <div className="text-brand-orange-400 mb-6">{info.icon}</div>
                 <h3 className="text-xl font-bold mb-4">{info.title}</h3>
                 <div className="space-y-2">
                   {info.details.map((detail, i) => (
-                    <p key={i} className="text-white/70 leading-relaxed">{detail}</p>
+                    <p key={i} className="text-white/70 leading-relaxed">
+                      {detail}
+                    </p>
                   ))}
                 </div>
               </motion.div>
@@ -74,7 +81,7 @@ const ContactDetails = () => {
         </div>
       </section>
 
-      {/* Contact Form */}
+      {/* Contact Form
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -139,6 +146,50 @@ const ContactDetails = () => {
             </div>
           </motion.form>
         </div>
+      </section> */}
+
+      {/* WhatsApp Contact Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-black mb-4">
+              Let’s Talk on <span className="text-green-400">WhatsApp</span>
+            </h2>
+            <p className="text-white/60 max-w-2xl mx-auto">
+              Skip the forms. Chat with us directly on WhatsApp and get quick
+              responses.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="flex justify-center"
+          >
+            <button
+              onClick={() =>
+                window.open(
+                  "https://wa.me/918539906485?text=Hi%20I%20would%20like%20to%20discuss%20a%20project",
+                  "_blank",
+                )
+              }
+              className="flex items-center gap-4 px-10 py-5 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold text-lg rounded-2xl hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/30"
+            >
+              <span className="text-2xl">💬</span>
+              Chat on WhatsApp
+            </button>
+          </motion.div>
+
+          <p className="text-center text-white/40 text-sm mt-6">
+            Opens WhatsApp Web or Mobile App
+          </p>
+        </div>
       </section>
 
       {/* Map Section */}
@@ -161,8 +212,12 @@ const ContactDetails = () => {
           >
             <div className="text-center">
               <FaMapMarkerAlt className="w-16 h-16 text-brand-orange-400 mx-auto mb-4" />
-              <p className="text-white/60">Interactive map would be embedded here</p>
-              <p className="text-white/40 text-sm mt-2">123 Innovation Street, Tech District, NY 10001</p>
+              <p className="text-white/60">
+                Interactive map would be embedded here
+              </p>
+              <p className="text-white/40 text-sm mt-2">
+                123 Innovation Street, Tech District, NY 10001
+              </p>
             </div>
           </motion.div>
         </div>
